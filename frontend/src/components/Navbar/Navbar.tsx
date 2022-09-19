@@ -15,7 +15,6 @@ const Navbar = () => {
   const handleResize = useCallback(
     (event: Event) => {
       const target = event.target as Window;
-      console.log(target.innerWidth);
       if (target.innerWidth > 850) {
         handleSetMobileNavOpen(false);
       }
@@ -42,14 +41,7 @@ const Navbar = () => {
         </Box>
       </Box>
       <Box as="nav" className="mainNav">
-        <Box
-          border="1px solid #8a8f9d"
-          borderRadius="3px"
-          padding="0.25rem"
-          cursor="pointer"
-        >
-          <AiOutlineClose color="#8a8f9d" fontSize="1.5rem" />
-        </Box>
+        <Box></Box>
         <UnorderedList display="flex" alignItems="center" listStyleType="none">
           <ListItems />
         </UnorderedList>

@@ -24,6 +24,10 @@ export const theme = extendTheme({
       primary: '#001f30',
       secondary: '#1e293b',
       tertiary: '#334e5c',
+      quatenary: '#0080FF',
+    },
+    red: {
+      primary: '#ff3333',
     },
     cover: {
       primary: 'rgba(54, 54, 54, 0.8)',
