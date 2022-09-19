@@ -20,17 +20,11 @@ export const theme = extendTheme({
     light: {
       primary: '#e4e3e3',
     },
-    purple: {
-      primary: '#9b5de5',
-    },
-    pink: {
-      primary: '#f15bb5',
-    },
-
     blue: {
-      primary: '#3182ce',
+      primary: '#001f30',
+      secondary: '#1e293b',
+      tertiary: '#334e5c',
     },
-
     cover: {
       primary: 'rgba(54, 54, 54, 0.8)',
     },
