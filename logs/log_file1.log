@@ -393,3 +393,213 @@ Traceback (most recent call last):
     raise TypeError(
 TypeError: CustomUser() got unexpected keyword arguments: 'confirm_password'
 ERROR 2022-09-19 23:32:50,841 187 basehttp.py basehttp 35466 123145339461632 "POST /api/v1/auth/register/ HTTP/1.1" 500 103598
+ERROR 2022-09-20 18:20:07,355 241 log.py log 43875 123145363996672 Internal Server Error: /api/v1/auth/logout/
+Traceback (most recent call last):
+  File "/Users/owner/Desktop/redal/venv/lib/python3.10/site-packages/django/core/handlers/exception.py", line 55, in inner
+    response = get_response(request)
+  File "/Users/owner/Desktop/redal/venv/lib/python3.10/site-packages/django/core/handlers/base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "/Users/owner/Desktop/redal/venv/lib/python3.10/site-packages/django/views/decorators/csrf.py", line 54, in wrapped_view
+    return view_func(*args, **kwargs)
+  File "/Users/owner/Desktop/redal/venv/lib/python3.10/site-packages/django/views/generic/base.py", line 103, in view
+    return self.dispatch(request, *args, **kwargs)
+  File "/Users/owner/Desktop/redal/venv/lib/python3.10/site-packages/rest_framework/views.py", line 509, in dispatch
+    response = self.handle_exception(exc)
+  File "/Users/owner/Desktop/redal/venv/lib/python3.10/site-packages/rest_framework/views.py", line 469, in handle_exception
+    self.raise_uncaught_exception(exc)
+  File "/Users/owner/Desktop/redal/venv/lib/python3.10/site-packages/rest_framework/views.py", line 480, in raise_uncaught_exception
+    raise exc
+  File "/Users/owner/Desktop/redal/venv/lib/python3.10/site-packages/rest_framework/views.py", line 506, in dispatch
+    response = handler(request, *args, **kwargs)
+  File "/Users/owner/Desktop/redal/authentication/views.py", line 26, in post
+    CustomUser.objects.logout(
+  File "/Users/owner/Desktop/redal/account/models.py", line 30, in logout
+    token = RefreshToken(refresh_token)
+  File "/Users/owner/Desktop/redal/venv/lib/python3.10/site-packages/rest_framework_simplejwt/tokens.py", line 47, in __init__
+    self.verify()
+  File "/Users/owner/Desktop/redal/venv/lib/python3.10/site-packages/rest_framework_simplejwt/tokens.py", line 218, in verify
+    self.check_blacklist()
+  File "/Users/owner/Desktop/redal/venv/lib/python3.10/site-packages/rest_framework_simplejwt/tokens.py", line 230, in check_blacklist
+    raise TokenError(_("Token is blacklisted"))
+rest_framework_simplejwt.exceptions.TokenError: Token is blacklisted
+ERROR 2022-09-20 18:20:07,418 187 basehttp.py basehttp 43875 123145363996672 "POST /api/v1/auth/logout/ HTTP/1.1" 500 108391
+ERROR 2022-09-20 18:20:09,305 241 log.py log 43875 123145363996672 Internal Server Error: /api/v1/auth/logout/
+Traceback (most recent call last):
+  File "/Users/owner/Desktop/redal/venv/lib/python3.10/site-packages/django/core/handlers/exception.py", line 55, in inner
+    response = get_response(request)
+  File "/Users/owner/Desktop/redal/venv/lib/python3.10/site-packages/django/core/handlers/base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "/Users/owner/Desktop/redal/venv/lib/python3.10/site-packages/django/views/decorators/csrf.py", line 54, in wrapped_view
+    return view_func(*args, **kwargs)
+  File "/Users/owner/Desktop/redal/venv/lib/python3.10/site-packages/django/views/generic/base.py", line 103, in view
+    return self.dispatch(request, *args, **kwargs)
+  File "/Users/owner/Desktop/redal/venv/lib/python3.10/site-packages/rest_framework/views.py", line 509, in dispatch
+    response = self.handle_exception(exc)
+  File "/Users/owner/Desktop/redal/venv/lib/python3.10/site-packages/rest_framework/views.py", line 469, in handle_exception
+    self.raise_uncaught_exception(exc)
+  File "/Users/owner/Desktop/redal/venv/lib/python3.10/site-packages/rest_framework/views.py", line 480, in raise_uncaught_exception
+    raise exc
+  File "/Users/owner/Desktop/redal/venv/lib/python3.10/site-packages/rest_framework/views.py", line 506, in dispatch
+    response = handler(request, *args, **kwargs)
+  File "/Users/owner/Desktop/redal/authentication/views.py", line 26, in post
+    CustomUser.objects.logout(
+  File "/Users/owner/Desktop/redal/account/models.py", line 30, in logout
+    token = RefreshToken(refresh_token)
+  File "/Users/owner/Desktop/redal/venv/lib/python3.10/site-packages/rest_framework_simplejwt/tokens.py", line 47, in __init__
+    self.verify()
+  File "/Users/owner/Desktop/redal/venv/lib/python3.10/site-packages/rest_framework_simplejwt/tokens.py", line 218, in verify
+    self.check_blacklist()
+  File "/Users/owner/Desktop/redal/venv/lib/python3.10/site-packages/rest_framework_simplejwt/tokens.py", line 230, in check_blacklist
+    raise TokenError(_("Token is blacklisted"))
+rest_framework_simplejwt.exceptions.TokenError: Token is blacklisted
+ERROR 2022-09-20 18:20:09,307 187 basehttp.py basehttp 43875 123145363996672 "POST /api/v1/auth/logout/ HTTP/1.1" 500 108391
+ERROR 2022-09-20 18:20:09,798 241 log.py log 43875 123145363996672 Internal Server Error: /api/v1/auth/logout/
+Traceback (most recent call last):
+  File "/Users/owner/Desktop/redal/venv/lib/python3.10/site-packages/django/core/handlers/exception.py", line 55, in inner
+    response = get_response(request)
+  File "/Users/owner/Desktop/redal/venv/lib/python3.10/site-packages/django/core/handlers/base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "/Users/owner/Desktop/redal/venv/lib/python3.10/site-packages/django/views/decorators/csrf.py", line 54, in wrapped_view
+    return view_func(*args, **kwargs)
+  File "/Users/owner/Desktop/redal/venv/lib/python3.10/site-packages/django/views/generic/base.py", line 103, in view
+    return self.dispatch(request, *args, **kwargs)
+  File "/Users/owner/Desktop/redal/venv/lib/python3.10/site-packages/rest_framework/views.py", line 509, in dispatch
+    response = self.handle_exception(exc)
+  File "/Users/owner/Desktop/redal/venv/lib/python3.10/site-packages/rest_framework/views.py", line 469, in handle_exception
+    self.raise_uncaught_exception(exc)
+  File "/Users/owner/Desktop/redal/venv/lib/python3.10/site-packages/rest_framework/views.py", line 480, in raise_uncaught_exception
+    raise exc
+  File "/Users/owner/Desktop/redal/venv/lib/python3.10/site-packages/rest_framework/views.py", line 506, in dispatch
+    response = handler(request, *args, **kwargs)
+  File "/Users/owner/Desktop/redal/authentication/views.py", line 26, in post
+    CustomUser.objects.logout(
+  File "/Users/owner/Desktop/redal/account/models.py", line 30, in logout
+    token = RefreshToken(refresh_token)
+  File "/Users/owner/Desktop/redal/venv/lib/python3.10/site-packages/rest_framework_simplejwt/tokens.py", line 47, in __init__
+    self.verify()
+  File "/Users/owner/Desktop/redal/venv/lib/python3.10/site-packages/rest_framework_simplejwt/tokens.py", line 218, in verify
+    self.check_blacklist()
+  File "/Users/owner/Desktop/redal/venv/lib/python3.10/site-packages/rest_framework_simplejwt/tokens.py", line 230, in check_blacklist
+    raise TokenError(_("Token is blacklisted"))
+rest_framework_simplejwt.exceptions.TokenError: Token is blacklisted
+ERROR 2022-09-20 18:20:09,799 187 basehttp.py basehttp 43875 123145363996672 "POST /api/v1/auth/logout/ HTTP/1.1" 500 108391
+ERROR 2022-09-20 18:20:10,331 241 log.py log 43875 123145363996672 Internal Server Error: /api/v1/auth/logout/
+Traceback (most recent call last):
+  File "/Users/owner/Desktop/redal/venv/lib/python3.10/site-packages/django/core/handlers/exception.py", line 55, in inner
+    response = get_response(request)
+  File "/Users/owner/Desktop/redal/venv/lib/python3.10/site-packages/django/core/handlers/base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "/Users/owner/Desktop/redal/venv/lib/python3.10/site-packages/django/views/decorators/csrf.py", line 54, in wrapped_view
+    return view_func(*args, **kwargs)
+  File "/Users/owner/Desktop/redal/venv/lib/python3.10/site-packages/django/views/generic/base.py", line 103, in view
+    return self.dispatch(request, *args, **kwargs)
+  File "/Users/owner/Desktop/redal/venv/lib/python3.10/site-packages/rest_framework/views.py", line 509, in dispatch
+    response = self.handle_exception(exc)
+  File "/Users/owner/Desktop/redal/venv/lib/python3.10/site-packages/rest_framework/views.py", line 469, in handle_exception
+    self.raise_uncaught_exception(exc)
+  File "/Users/owner/Desktop/redal/venv/lib/python3.10/site-packages/rest_framework/views.py", line 480, in raise_uncaught_exception
+    raise exc
+  File "/Users/owner/Desktop/redal/venv/lib/python3.10/site-packages/rest_framework/views.py", line 506, in dispatch
+    response = handler(request, *args, **kwargs)
+  File "/Users/owner/Desktop/redal/authentication/views.py", line 26, in post
+    CustomUser.objects.logout(
+  File "/Users/owner/Desktop/redal/account/models.py", line 30, in logout
+    token = RefreshToken(refresh_token)
+  File "/Users/owner/Desktop/redal/venv/lib/python3.10/site-packages/rest_framework_simplejwt/tokens.py", line 47, in __init__
+    self.verify()
+  File "/Users/owner/Desktop/redal/venv/lib/python3.10/site-packages/rest_framework_simplejwt/tokens.py", line 218, in verify
+    self.check_blacklist()
+  File "/Users/owner/Desktop/redal/venv/lib/python3.10/site-packages/rest_framework_simplejwt/tokens.py", line 230, in check_blacklist
+    raise TokenError(_("Token is blacklisted"))
+rest_framework_simplejwt.exceptions.TokenError: Token is blacklisted
+ERROR 2022-09-20 18:20:10,334 187 basehttp.py basehttp 43875 123145363996672 "POST /api/v1/auth/logout/ HTTP/1.1" 500 108391
+ERROR 2022-09-20 18:20:10,464 241 log.py log 43875 123145363996672 Internal Server Error: /api/v1/auth/logout/
+Traceback (most recent call last):
+  File "/Users/owner/Desktop/redal/venv/lib/python3.10/site-packages/django/core/handlers/exception.py", line 55, in inner
+    response = get_response(request)
+  File "/Users/owner/Desktop/redal/venv/lib/python3.10/site-packages/django/core/handlers/base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "/Users/owner/Desktop/redal/venv/lib/python3.10/site-packages/django/views/decorators/csrf.py", line 54, in wrapped_view
+    return view_func(*args, **kwargs)
+  File "/Users/owner/Desktop/redal/venv/lib/python3.10/site-packages/django/views/generic/base.py", line 103, in view
+    return self.dispatch(request, *args, **kwargs)
+  File "/Users/owner/Desktop/redal/venv/lib/python3.10/site-packages/rest_framework/views.py", line 509, in dispatch
+    response = self.handle_exception(exc)
+  File "/Users/owner/Desktop/redal/venv/lib/python3.10/site-packages/rest_framework/views.py", line 469, in handle_exception
+    self.raise_uncaught_exception(exc)
+  File "/Users/owner/Desktop/redal/venv/lib/python3.10/site-packages/rest_framework/views.py", line 480, in raise_uncaught_exception
+    raise exc
+  File "/Users/owner/Desktop/redal/venv/lib/python3.10/site-packages/rest_framework/views.py", line 506, in dispatch
+    response = handler(request, *args, **kwargs)
+  File "/Users/owner/Desktop/redal/authentication/views.py", line 26, in post
+    CustomUser.objects.logout(
+  File "/Users/owner/Desktop/redal/account/models.py", line 30, in logout
+    token = RefreshToken(refresh_token)
+  File "/Users/owner/Desktop/redal/venv/lib/python3.10/site-packages/rest_framework_simplejwt/tokens.py", line 47, in __init__
+    self.verify()
+  File "/Users/owner/Desktop/redal/venv/lib/python3.10/site-packages/rest_framework_simplejwt/tokens.py", line 218, in verify
+    self.check_blacklist()
+  File "/Users/owner/Desktop/redal/venv/lib/python3.10/site-packages/rest_framework_simplejwt/tokens.py", line 230, in check_blacklist
+    raise TokenError(_("Token is blacklisted"))
+rest_framework_simplejwt.exceptions.TokenError: Token is blacklisted
+ERROR 2022-09-20 18:20:10,465 187 basehttp.py basehttp 43875 123145363996672 "POST /api/v1/auth/logout/ HTTP/1.1" 500 108391
+ERROR 2022-09-20 18:20:10,651 241 log.py log 43875 123145363996672 Internal Server Error: /api/v1/auth/logout/
+Traceback (most recent call last):
+  File "/Users/owner/Desktop/redal/venv/lib/python3.10/site-packages/django/core/handlers/exception.py", line 55, in inner
+    response = get_response(request)
+  File "/Users/owner/Desktop/redal/venv/lib/python3.10/site-packages/django/core/handlers/base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "/Users/owner/Desktop/redal/venv/lib/python3.10/site-packages/django/views/decorators/csrf.py", line 54, in wrapped_view
+    return view_func(*args, **kwargs)
+  File "/Users/owner/Desktop/redal/venv/lib/python3.10/site-packages/django/views/generic/base.py", line 103, in view
+    return self.dispatch(request, *args, **kwargs)
+  File "/Users/owner/Desktop/redal/venv/lib/python3.10/site-packages/rest_framework/views.py", line 509, in dispatch
+    response = self.handle_exception(exc)
+  File "/Users/owner/Desktop/redal/venv/lib/python3.10/site-packages/rest_framework/views.py", line 469, in handle_exception
+    self.raise_uncaught_exception(exc)
+  File "/Users/owner/Desktop/redal/venv/lib/python3.10/site-packages/rest_framework/views.py", line 480, in raise_uncaught_exception
+    raise exc
+  File "/Users/owner/Desktop/redal/venv/lib/python3.10/site-packages/rest_framework/views.py", line 506, in dispatch
+    response = handler(request, *args, **kwargs)
+  File "/Users/owner/Desktop/redal/authentication/views.py", line 26, in post
+    CustomUser.objects.logout(
+  File "/Users/owner/Desktop/redal/account/models.py", line 30, in logout
+    token = RefreshToken(refresh_token)
+  File "/Users/owner/Desktop/redal/venv/lib/python3.10/site-packages/rest_framework_simplejwt/tokens.py", line 47, in __init__
+    self.verify()
+  File "/Users/owner/Desktop/redal/venv/lib/python3.10/site-packages/rest_framework_simplejwt/tokens.py", line 218, in verify
+    self.check_blacklist()
+  File "/Users/owner/Desktop/redal/venv/lib/python3.10/site-packages/rest_framework_simplejwt/tokens.py", line 230, in check_blacklist
+    raise TokenError(_("Token is blacklisted"))
+rest_framework_simplejwt.exceptions.TokenError: Token is blacklisted
+ERROR 2022-09-20 18:20:10,652 187 basehttp.py basehttp 43875 123145363996672 "POST /api/v1/auth/logout/ HTTP/1.1" 500 108391
+ERROR 2022-09-20 18:20:10,851 241 log.py log 43875 123145363996672 Internal Server Error: /api/v1/auth/logout/
+Traceback (most recent call last):
+  File "/Users/owner/Desktop/redal/venv/lib/python3.10/site-packages/django/core/handlers/exception.py", line 55, in inner
+    response = get_response(request)
+  File "/Users/owner/Desktop/redal/venv/lib/python3.10/site-packages/django/core/handlers/base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "/Users/owner/Desktop/redal/venv/lib/python3.10/site-packages/django/views/decorators/csrf.py", line 54, in wrapped_view
+    return view_func(*args, **kwargs)
+  File "/Users/owner/Desktop/redal/venv/lib/python3.10/site-packages/django/views/generic/base.py", line 103, in view
+    return self.dispatch(request, *args, **kwargs)
+  File "/Users/owner/Desktop/redal/venv/lib/python3.10/site-packages/rest_framework/views.py", line 509, in dispatch
+    response = self.handle_exception(exc)
+  File "/Users/owner/Desktop/redal/venv/lib/python3.10/site-packages/rest_framework/views.py", line 469, in handle_exception
+    self.raise_uncaught_exception(exc)
+  File "/Users/owner/Desktop/redal/venv/lib/python3.10/site-packages/rest_framework/views.py", line 480, in raise_uncaught_exception
+    raise exc
+  File "/Users/owner/Desktop/redal/venv/lib/python3.10/site-packages/rest_framework/views.py", line 506, in dispatch
+    response = handler(request, *args, **kwargs)
+  File "/Users/owner/Desktop/redal/authentication/views.py", line 26, in post
+    CustomUser.objects.logout(
+  File "/Users/owner/Desktop/redal/account/models.py", line 30, in logout
+    token = RefreshToken(refresh_token)
+  File "/Users/owner/Desktop/redal/venv/lib/python3.10/site-packages/rest_framework_simplejwt/tokens.py", line 47, in __init__
+    self.verify()
+  File "/Users/owner/Desktop/redal/venv/lib/python3.10/site-packages/rest_framework_simplejwt/tokens.py", line 218, in verify
+    self.check_blacklist()
+  File "/Users/owner/Desktop/redal/venv/lib/python3.10/site-packages/rest_framework_simplejwt/tokens.py", line 230, in check_blacklist
+    raise TokenError(_("Token is blacklisted"))
+rest_framework_simplejwt.exceptions.TokenError: Token is blacklisted
+ERROR 2022-09-20 18:20:10,852 187 basehttp.py basehttp 43875 123145363996672 "POST /api/v1/auth/logout/ HTTP/1.1" 500 108391

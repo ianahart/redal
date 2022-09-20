@@ -13,6 +13,9 @@ instance/
 htmlcov/
 commands.txt
 
+
+logs/
+
 .env
 .DS_Store
 dist/

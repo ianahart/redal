@@ -3,6 +3,35 @@ import re
 from account.models import CustomUser
 
 
+class LogoutSerializer(serializers.ModelSerializer):
+    refresh_token = serializers.CharField()
+    id = serializers.IntegerField()
+
+    class Meta:
+        model = CustomUser
+        fields = ('id', 'refresh_token', )
+
+
+
+class LoginSerializer(serializers.Serializer):
+    password = serializers.CharField()
+    email = serializers.CharField()
+    class Meta:
+        model = CustomUser
+        fields = ('email', 'password')
+
+    def validate_email(self, email: str):
+        if len(email) == 0:
+            raise serializers.ValidationError('Email cannot be empty.')
+        return email
+
+    def validate_password(self, password: str):
+        if len(password) == 0:
+            raise serializers.ValidationError('Password cannot be empty.')
+        return password
+
+
+
 class RegisterSerializer(serializers.ModelSerializer):
     confirm_password = serializers.CharField()
     class Meta:

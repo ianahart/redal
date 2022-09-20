@@ -1,6 +1,8 @@
 import jwt
 import logging
 from typing import Union
+
+from rest_framework.exceptions import ParseError
 from core import settings
 from django.core.mail import EmailMessage
 from rest_framework_simplejwt.exceptions import TokenError
@@ -19,6 +21,15 @@ logger = logging.getLogger('django')
 
 
 class CustomUserManager(BaseUserManager):
+
+
+    def logout(self, id: int, refresh_token: str):
+        user = CustomUser.objects.get(pk=id)
+        user.logged_in = False
+
+        token = RefreshToken(refresh_token)
+        token.blacklist()
+
 
     def create(self, email: str, password: str, **extra_fields):
         """
@@ -51,6 +62,52 @@ class CustomUserManager(BaseUserManager):
 
 
 
+
+    def user_by_token(self, user: 'CustomUser', token: str):
+        decoded_token = None
+        try:
+            decoded_token = TokenBackend(
+                algorithm='HS256'
+            ).decode(token.split('Bearer ')[1], verify=False)
+
+        except IndexError:
+            logger.error('Malformed token inside get user by token')
+
+        if decoded_token is not None:
+            obj = CustomUser.objects.get(pk=decoded_token['user_id'])
+            return None if obj.pk != user.pk else obj
+
+
+    def login(self, email: str, password: str):
+        try:
+            user = self.__user_exists(email=email)
+
+            if user is None:
+                raise ParseError('User does not exist.')
+
+
+            if not hashers.check_password(password, user.password):
+                raise ParseError('Invalid credentials.')
+
+
+
+            refresh_token = RefreshToken.for_user(user)
+            access_token = refresh_token.access_token
+            access_token.set_exp(lifetime=timedelta(days=3))
+
+            tokens = {
+                'access_token': str(access_token),
+                'refresh_token': str(refresh_token)
+            }
+
+            user.logged_in = True #type:ignore
+            user.save()
+            user.refresh_from_db()
+
+            return {'type': 'ok', 'user': user, 'tokens': tokens}
+        except ParseError as e:
+            return {'type': 'error', 'msg': e.detail}
+
 class CustomUser(AbstractUser, PermissionsMixin):
     username = None
     logged_in = models.BooleanField(default=False) #type:ignore
@@ -79,4 +136,9 @@ class CustomUser(AbstractUser, PermissionsMixin):
 
     def __str__(self):
         return f"{self.email}"
+
+    @property
+    def initials(self):
+        return str(self.first_name)[0:1] + str(self.last_name)[0:1]
+
 
