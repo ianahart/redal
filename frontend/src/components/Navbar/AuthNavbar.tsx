@@ -82,7 +82,7 @@ const AuthNavbar = () => {
             justifyContent="center"
             ml="2rem"
             borderRadius="50%"
-            bg="blue.tertiary"
+            bg={user.color}
             mr="1.5rem"
             position="relative"
             ref={menuRef}

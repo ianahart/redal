@@ -21,6 +21,7 @@ export const userState = {
   last_name: '',
   first_name: '',
   logged_in: false,
+  color: '',
 };
 
 const tokens = retreiveTokens();

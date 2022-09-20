@@ -19,6 +19,7 @@ export interface IUser {
   last_name: string;
   first_name: string;
   logged_in: boolean;
+  color: string;
 }
 
 export interface ITokens {

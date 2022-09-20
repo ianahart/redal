@@ -16,11 +16,24 @@ from django.utils.translation import gettext_lazy as _
 from django.utils import timezone
 from django.core.exceptions import ObjectDoesNotExist
 from datetime import datetime, timedelta, date
-
+import random
 logger = logging.getLogger('django')
 
 
 class CustomUserManager(BaseUserManager):
+
+
+    def __avatar_colors(self):
+     colors = ['#FDDB40',
+            '#2482E6',
+            '#0C7C59',
+            '#2B303A',
+            '#D64933'
+        ]
+
+     random_int = random.randint(0, len(colors) - 1)
+     return colors[random_int]
+
 
 
     def logout(self, id: int, refresh_token: str):
@@ -35,6 +48,7 @@ class CustomUserManager(BaseUserManager):
         """
         Create and save a User with the given email and password.
         """
+        extra_fields['color'] = self.__avatar_colors()
         if not email:
             raise ValueError(_('The Email must be set'))
         email = self.normalize_email(email)
@@ -114,6 +128,7 @@ class CustomUser(AbstractUser, PermissionsMixin):
     avatar_file = models.TextField(max_length=500, blank=True, null=True)
     avatar_url = models.URLField(max_length=500, blank=True, null=True)
     password_strength = models.CharField(max_length=50, blank=True, null=True)
+    color = models.CharField(max_length=50, blank=True, null=True)
     created_at = models.DateTimeField(default=timezone.now)
     updated_at = models.DateTimeField(default=timezone.now)
     name = models.CharField(unique=True, max_length=200, blank=True, null=True)
