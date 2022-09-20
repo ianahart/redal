@@ -14,7 +14,9 @@ htmlcov/
 commands.txt
 
 
+logs/*
 logs/
+logs/log_file1.log
 
 .env
 .DS_Store
