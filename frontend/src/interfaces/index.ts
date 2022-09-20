@@ -11,6 +11,11 @@ export interface ILoginForm {
   password: { name: string; value: string; error: string; type: string };
 }
 
+export interface IProfileForm {
+  display_name: { name: string; value: string };
+  about: { name: string; value: string };
+}
+
 export interface IUser {
   avatar_url: string | null;
   email: string;

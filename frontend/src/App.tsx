@@ -19,7 +19,9 @@ import RequireAuth from './components/Mixed/RequireAuth';
 import WithAxios from './helpers/WithAxios';
 import AuthNavbar from './components/Navbar/AuthNavbar';
 import Settings from './pages/Settings';
-import Profile from './pages/Profile';
+import Account from './components/Settings/Account';
+import ProfileForm from './components/Settings/ProfileForm';
+import Notifications from './components/Settings/Notifications';
 
 function App() {
   const { setUser, user } = useContext(UserContext) as IUserContext;
@@ -67,22 +69,40 @@ function App() {
               />
 
               <Route
-                path="/redal/profile"
-                element={
-                  <RequireAuth>
-                    <Profile />
-                  </RequireAuth>
-                }
-              />
-
-              <Route
                 path="/redal/settings"
                 element={
                   <RequireAuth>
                     <Settings />
                   </RequireAuth>
                 }
-              />
+              >
+                <Route
+                  path="account"
+                  element={
+                    <RequireAuth>
+                      <Account />
+                    </RequireAuth>
+                  }
+                />
+
+                <Route
+                  path="profile"
+                  element={
+                    <RequireAuth>
+                      <ProfileForm />
+                    </RequireAuth>
+                  }
+                />
+
+                <Route
+                  path="notifications"
+                  element={
+                    <RequireAuth>
+                      <Notifications />
+                    </RequireAuth>
+                  }
+                />
+              </Route>
 
               <Route
                 path="/sign-up"

@@ -29,3 +29,8 @@ export const tokenState = {
   access_token: tokens?.access_token ? tokens.access_token : '',
   refresh_token: tokens?.refresh_token ? tokens.refresh_token : '',
 };
+
+export const ProfileFormState = {
+  display_name: { name: 'display_name', value: '' },
+  about: { name: 'about_name', value: '' },
+};

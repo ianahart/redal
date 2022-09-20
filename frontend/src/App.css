@@ -39,6 +39,11 @@ body {
   display: none;
 }
 
+.borderBottom {
+  border-bottom: 3px solid;
+  border-color: #334e5c;
+}
+
 @media (max-width: 850px) {
   .mainNav {
     display: none;

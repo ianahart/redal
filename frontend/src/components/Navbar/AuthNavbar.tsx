@@ -9,7 +9,7 @@ import { UserContext } from '../../context/user';
 import { IUserContext } from '../../interfaces';
 import Searchbar from './Searchbar';
 import logo from '../../images/logo.png';
-import { AiOutlineUser } from 'react-icons/ai';
+import { AiOutlineHome, AiOutlineUser } from 'react-icons/ai';
 
 const AuthNavbar = () => {
   const { user, tokens, logout } = useContext(UserContext) as IUserContext;
@@ -102,21 +102,25 @@ const AuthNavbar = () => {
               >
                 <Box display="flex" flexDir="column">
                   <Box p="0.5rem" display="flex" alignItems="center">
-                    <AiOutlineUser color="#fff" />
-                    <RouterLink to="/profile" color="#fff">
-                      Profile
+                    <Box mr="0.5rem">
+                      <AiOutlineHome color="#fff" />
+                    </Box>
+                    <RouterLink to="/redal" color="#fff">
+                      Home
                     </RouterLink>
                   </Box>
                   <Box p="0.5rem" display="flex" alignItems="center">
-                    <FiSettings color="#fff" />
-                    <RouterLink to="/settings" color="#fff">
-                      Settings
+                    <Box mr="0.5rem">
+                      <FiSettings color="#fff" />
+                    </Box>
+                    <RouterLink to="/redal/settings/account" color="#fff">
+                      User Settings
                     </RouterLink>
                   </Box>
 
                   <Box p="0.5rem" onClick={logoutUser} display="flex" alignItems="center">
                     <TbLogout color="#fff" />
-                    <Text p="0.25rem" textAlign="left" color="#fff">
+                    <Text ml="0.25rem" p="0.25rem" textAlign="left" color="#fff">
                       Logout
                     </Text>
                   </Box>
