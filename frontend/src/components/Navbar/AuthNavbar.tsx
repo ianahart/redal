@@ -40,7 +40,7 @@ const AuthNavbar = () => {
       setMenuOpen(false);
     } catch (err: unknown | AxiosError) {
       if (err instanceof AxiosError && err.response) {
-        console.log(err);
+        return;
       }
     }
   };
@@ -82,12 +82,14 @@ const AuthNavbar = () => {
             justifyContent="center"
             ml="2rem"
             borderRadius="50%"
-            bg={user.color}
+            bg={!user.avatar_url ? user.color : 'none'}
+            backgroundImage={user.avatar_url ? `url(${user.avatar_url})` : ''}
+            backgroundSize={user.avatar_url ? 'cover' : ''}
             mr="1.5rem"
             position="relative"
             ref={menuRef}
           >
-            <Text m="0">{user.initials}</Text>
+            {!user.avatar_url && <Text m="0">{user.initials}</Text>}
             {menuOpen && (
               <Box
                 position="absolute"
@@ -101,6 +103,12 @@ const AuthNavbar = () => {
                 minH="320px"
               >
                 <Box display="flex" flexDir="column">
+                  <Box>
+                    <Text borderBottom="1px solid" borderColor="text.primary">
+                      {user.first_name}
+                    </Text>
+                  </Box>
+
                   <Box p="0.5rem" display="flex" alignItems="center">
                     <Box mr="0.5rem">
                       <AiOutlineHome color="#fff" />

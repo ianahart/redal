@@ -21,6 +21,8 @@ class CustomUserAdmin(BaseUserAdmin):
             {
                 'fields': (
                     'email',
+                    'about',
+                    'display_name',
                     'date_joined',
                     'avatar_url',
                     'first_name',

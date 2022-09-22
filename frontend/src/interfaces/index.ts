@@ -12,8 +12,8 @@ export interface ILoginForm {
 }
 
 export interface IProfileForm {
-  display_name: { name: string; value: string };
-  about: { name: string; value: string };
+  display_name: { name: string; value: string; error: string };
+  about: { name: string; value: string; error: string };
 }
 
 export interface IUser {
@@ -25,6 +25,8 @@ export interface IUser {
   first_name: string;
   logged_in: boolean;
   color: string;
+  about: string | null;
+  display_name: string | null;
 }
 
 export interface ITokens {
@@ -37,6 +39,7 @@ export interface IUserContext {
   tokens: ITokens;
   logout: () => void;
   setUser: (user: IUser) => void;
+  updateUser: (user: IUser) => void;
   setTokens: (tokens: ITokens) => void;
   stowTokens: (tokens: ITokens) => void;
 }
@@ -44,5 +47,10 @@ export interface IUserContext {
 export interface ILoginResponse {
   message?: string;
   tokens: ITokens;
+  user: IUser;
+}
+
+export interface IProfileFormResponse {
+  message?: string;
   user: IUser;
 }

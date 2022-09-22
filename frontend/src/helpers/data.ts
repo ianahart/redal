@@ -14,6 +14,8 @@ export const loginState = {
 };
 
 export const userState = {
+  about: '',
+  display_name: '',
   avatar_url: null,
   email: '',
   id: 0,
@@ -30,7 +32,7 @@ export const tokenState = {
   refresh_token: tokens?.refresh_token ? tokens.refresh_token : '',
 };
 
-export const ProfileFormState = {
-  display_name: { name: 'display_name', value: '' },
-  about: { name: 'about_name', value: '' },
+export const profileFormState = {
+  display_name: { name: 'display_name', value: '', error: '' },
+  about: { name: 'about', value: '', error: '' },
 };

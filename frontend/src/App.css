@@ -29,6 +29,12 @@ body {
   margin-top: auto;
 }
 
+.profileFormImage {
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
+}
+
 .mainNav {
   display: flex;
   justify-content: space-evenly;

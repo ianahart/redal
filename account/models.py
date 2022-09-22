@@ -1,6 +1,6 @@
 import jwt
 import logging
-from typing import Union
+from typing import Any, Dict, Union
 
 from rest_framework.exceptions import ParseError
 from core import settings
@@ -16,6 +16,7 @@ from django.utils.translation import gettext_lazy as _
 from django.utils import timezone
 from django.core.exceptions import ObjectDoesNotExist
 from datetime import datetime, timedelta, date
+from services.file_upload import FileUpload
 import random
 logger = logging.getLogger('django')
 
@@ -92,6 +93,30 @@ class CustomUserManager(BaseUserManager):
             return None if obj.pk != user.pk else obj
 
 
+
+    def update_profile(self, pk: int, data: Dict[str, str], file: Dict[str, Any]):
+        user = CustomUser.objects.get(pk=pk)
+        if file is not None and 'file' in file:
+            aws = FileUpload(file['file'], 'avatars')
+            if user.avatar_file is not None and len(user.avatar_file) > 0:
+               aws.delete(user.avatar_file)
+            avatar_url, avatar_file = aws.upload()
+
+            if avatar_url is not None and avatar_file is not None:
+                user.avatar_url = avatar_url
+                user.avatar_file = avatar_file
+
+        about, display_name = data.values()
+        user.about = about
+        user.display_name = display_name
+
+        user.save()
+        user.refresh_from_db()
+
+        return user
+
+
+
     def login(self, email: str, password: str):
         try:
             user = self.__user_exists(email=email)
@@ -132,6 +157,8 @@ class CustomUser(AbstractUser, PermissionsMixin):
     created_at = models.DateTimeField(default=timezone.now)
     updated_at = models.DateTimeField(default=timezone.now)
     name = models.CharField(unique=True, max_length=200, blank=True, null=True)
+    display_name = models.CharField(max_length=30, blank=True, null=True)
+    about = models.CharField(max_length=200, blank=True, null=True)
     first_name = models.CharField(max_length=200, blank=True, null=True)
     last_name = models.CharField(max_length=200, blank=True, null=True)
     email = models.EmailField(_(
