@@ -6,8 +6,6 @@ import {
   useRef,
   MouseEvent as ReactMouseEvent,
 } from 'react';
-import { Link as RouterLink } from 'react-router-dom';
-import { TbLogout } from 'react-icons/tb';
 import { FiSettings } from 'react-icons/fi';
 import { BsList, BsChevronLeft } from 'react-icons/bs';
 
@@ -15,11 +13,9 @@ import {
   AiOutlineFileAdd,
   AiOutlineHome,
   AiOutlinePlus,
-  AiOutlineUser,
   AiOutlineClose,
 } from 'react-icons/ai';
 import AuthMenuLink from './AuthMenuLink';
-import { IconType } from 'react-icons';
 
 const AuthMenu = () => {
   const menuRef = useRef<HTMLDivElement>(null);
