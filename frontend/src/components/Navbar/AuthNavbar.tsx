@@ -10,6 +10,7 @@ import { IUserContext } from '../../interfaces';
 import Searchbar from './Searchbar';
 import logo from '../../images/logo.png';
 import { AiOutlineHome, AiOutlineUser } from 'react-icons/ai';
+import AuthMenu from './AuthMenu';
 
 const AuthNavbar = () => {
   const { user, tokens, logout } = useContext(UserContext) as IUserContext;
@@ -49,6 +50,7 @@ const AuthNavbar = () => {
     <Box
       display="flex"
       alignItems="center"
+      flexDir={['column', 'column', 'row']}
       justifyContent="space-around"
       width="100%"
       bg="blue.secondary"
@@ -56,28 +58,38 @@ const AuthNavbar = () => {
     >
       <Box
         display="flex"
-        alignItems="center"
+        flexDir={['column', 'column', 'row']}
+        alignItems={['flex-start', 'flex-start', 'center']}
         justifyContent="space-between"
         as="nav"
         width="100%"
       >
-        <Image
-          ml="1rem"
-          borderRadius="8px"
-          width="40px"
-          height="40px"
-          src={logo}
-          alt="logo"
-        />
-        <Box display="flex" alignItems="center">
+        <Box justifyContent="space-between" display="flex" alignItems="center">
+          <Image
+            ml="1rem"
+            borderRadius="8px"
+            width="40px"
+            height="40px"
+            src={logo}
+            alt="logo"
+          />
+          <AuthMenu />
+        </Box>
+        <Box
+          mt={['2rem', 0, 0]}
+          flexDir={['column', 'column', 'row']}
+          display={['none', 'none', 'flex']}
+          alignItems="center"
+        >
           <Searchbar />
           <Box
             onClick={() => setMenuOpen(true)}
             height="50px"
+            mt={['1rem', '1rem', 0]}
+            mb={['1rem', '1rem', 0]}
             width="50px"
             color="#fff"
             cursor="pointer"
-            display="flex"
             alignItems="center"
             justifyContent="center"
             ml="2rem"
