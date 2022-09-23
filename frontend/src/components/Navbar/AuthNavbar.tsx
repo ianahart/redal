@@ -6,13 +6,15 @@ import { FiSettings } from 'react-icons/fi';
 import { AxiosError } from 'axios';
 import { http } from '../../helpers/utils';
 import { UserContext } from '../../context/user';
-import { IUserContext } from '../../interfaces';
+import { ICommunityContext, IUserContext } from '../../interfaces';
 import Searchbar from './Searchbar';
 import logo from '../../images/logo.png';
 import { AiOutlineHome, AiOutlineUser } from 'react-icons/ai';
 import AuthMenu from './AuthMenu';
+import { CommunityContext } from '../../context/community';
 
 const AuthNavbar = () => {
+  const { resetCommunities } = useContext(CommunityContext) as ICommunityContext;
   const { user, tokens, logout } = useContext(UserContext) as IUserContext;
   const [menuOpen, setMenuOpen] = useState(false);
   const menuRef = useRef<HTMLDivElement>(null);
@@ -39,6 +41,7 @@ const AuthNavbar = () => {
       });
       logout();
       setMenuOpen(false);
+      resetCommunities();
     } catch (err: unknown | AxiosError) {
       if (err instanceof AxiosError && err.response) {
         return;

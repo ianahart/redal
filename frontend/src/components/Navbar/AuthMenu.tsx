@@ -3,12 +3,13 @@ import {
   useEffect,
   useState,
   useCallback,
+  useContext,
   useRef,
   MouseEvent as ReactMouseEvent,
 } from 'react';
 import { FiSettings } from 'react-icons/fi';
 import { BsList, BsChevronLeft } from 'react-icons/bs';
-
+import { TbLogout } from 'react-icons/tb';
 import {
   AiOutlineFileAdd,
   AiOutlineHome,
@@ -16,8 +17,30 @@ import {
   AiOutlineClose,
 } from 'react-icons/ai';
 import AuthMenuLink from './AuthMenuLink';
+import { useEffectOnce } from '../../hooks/UseEffectOnce';
+import { AxiosError } from 'axios';
+import { http } from '../../helpers/utils';
+import {
+  ICommunity,
+  ICommunityContext,
+  IAuthorCommunityResponse,
+  IUserContext,
+} from '../../interfaces';
+import { CommunityContext } from '../../context/community';
+import CommunityList from '../Community/CommunityList';
+import { UserContext } from '../../context/user';
 
 const AuthMenu = () => {
+  const { user, tokens, logout } = useContext(UserContext) as IUserContext;
+  const {
+    handleSetCommunities,
+    menuHasNextPage,
+    menuCurrentPage,
+    setMenuCurrentPage,
+    setMenuHasNextPage,
+    communities,
+    resetCommunities,
+  } = useContext(CommunityContext) as ICommunityContext;
   const menuRef = useRef<HTMLDivElement>(null);
   const triggerRef = useRef<HTMLDivElement>(null);
   const [currentPage, setCurrentPage] = useState('Home');
@@ -48,6 +71,39 @@ const AuthMenu = () => {
     setMenuView(view);
     if (view === 'nav') {
       setMenuOpen(false);
+    }
+  };
+
+  const fetchCommunities = async (endpoint: string) => {
+    try {
+      const response = await http.get<IAuthorCommunityResponse>(endpoint);
+      handleSetCommunities(response.data.communities);
+      setMenuCurrentPage(response.data.page);
+      setMenuHasNextPage(response.data.has_next);
+    } catch (err: unknown | AxiosError) {
+      if (err instanceof AxiosError && err.response) {
+        console.log(err.response);
+      }
+    }
+  };
+
+  useEffectOnce(() => {
+    fetchCommunities('/community/?page=0');
+  });
+
+  const logoutUser = async () => {
+    try {
+      await http.post('/auth/logout/', {
+        id: user.id,
+        refresh_token: tokens.refresh_token,
+      });
+      logout();
+      setMenuOpen(false);
+      resetCommunities();
+    } catch (err: unknown | AxiosError) {
+      if (err instanceof AxiosError && err.response) {
+        return;
+      }
     }
   };
 
@@ -140,7 +196,41 @@ const AuthMenu = () => {
                 label="Create Post"
                 icon={AiOutlineFileAdd}
               />
+
+              <Box
+                cursor="pointer"
+                p="0.5rem"
+                onClick={logoutUser}
+                display="flex"
+                alignItems="center"
+              >
+                <TbLogout color="#fff" />
+                <Text
+                  color="text.primary"
+                  fontSize="0.85rem"
+                  ml="0.25rem"
+                  p="0.25rem"
+                  textAlign="left"
+                >
+                  Logout
+                </Text>
+              </Box>
             </Box>
+            <Text p="1rem" fontSize="0.75rem" textTransform="uppercase">
+              Communities
+            </Text>
+            {communities.length > 0 && <CommunityList communities={communities} />}
+            {menuHasNextPage && (
+              <Text
+                role="button"
+                onClick={() => fetchCommunities(`/community/?page=${menuCurrentPage}`)}
+                cursor="pointer"
+                fontSize="0.8rem"
+                p="0 1rem 1rem 1rem"
+              >
+                See more
+              </Text>
+            )}
           </Box>
         </Box>
       )}

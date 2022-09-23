@@ -2,10 +2,17 @@ from rest_framework import serializers
 
 from community.models import Community
 
+class CommunitySerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Community
+        fields = ('id', 'name', 'type',
+                'image_url', 'user_id','slug', 'author_id',
+                )
+
 class CreateCommunitySerializer(serializers.ModelSerializer):
     class Meta:
         model = Community
-        fields = ('name', 'type', 'user', )
+        fields = ('name', 'type', 'user', 'author', )
 
     def validate_name(self, name: str):
         if len(name) == 0 or len(name) > 200:

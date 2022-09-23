@@ -59,3 +59,36 @@ export interface IProfileFormResponse {
   message?: string;
   user: IUser;
 }
+
+export interface ICommunity {
+  id: number;
+  name: string;
+  type: string;
+  image_url: string;
+  slug: string;
+}
+
+export interface IAuthorCommunityResponse {
+  message?: string;
+  communities: ICommunity[];
+  has_next: boolean;
+  page: number;
+}
+
+export interface ICreateCommunityResponse {
+  message?: string;
+  communities: ICommunity[];
+  has_next: boolean;
+  page: number;
+}
+
+export interface ICommunityContext {
+  communities: ICommunity[];
+  handleSetCommunities: (communities: ICommunity[]) => void;
+  setCommunities: (communities: ICommunity[]) => void;
+  resetCommunities: () => void;
+  menuHasNextPage: boolean;
+  menuCurrentPage: number;
+  setMenuCurrentPage: (menuCurrentPage: number) => void;
+  setMenuHasNextPage: (menuHasNextPage: boolean) => void;
+}

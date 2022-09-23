@@ -5,16 +5,41 @@ from django.db import DatabaseError
 from django.contrib.auth.hashers import check_password
 from rest_framework.decorators import authentication_classes, permission_classes
 from rest_framework.parsers import FormParser, MultiPartParser
-from rest_framework.exceptions import ParseError
+from rest_framework.exceptions import NotFound, ParseError
 from rest_framework.views import APIView
 from rest_framework import status
 from rest_framework.response import Response
 from rest_framework.permissions import AllowAny, IsAuthenticated
 from rest_framework.parsers import FormParser, MultiPartParser
 from community.models import Community
-from community.serializers import CreateCommunitySerializer, FileSerializer
+from community.serializers import CommunitySerializer, CreateCommunitySerializer, FileSerializer
 import json
 
+
+
+class ListCreateAPIView(APIView):
+    def get(self, request):
+        try:
+            if 'page' not in request.query_params:
+               raise NotFound
+
+            page = request.query_params['page']
+            print(page)
+
+
+            result = Community.objects.retrieve_all(int(request.user.id), int(page))
+            serializer = CommunitySerializer(result['communities'], many=True)
+            return Response({
+                                'message': 'success',
+                                'communities': serializer.data,
+                                'page': result['page'],
+                                'has_next': result['has_next']
+                            }, status=status.HTTP_200_OK)
+
+        except NotFound:
+            return Response({
+                                'error': 'No communities found.'
+                            }, status=status.HTTP_404_NOT_FOUND)
 
 class CreateCommunityAPIView(APIView):
     permission_classes = [IsAuthenticated, ]
@@ -25,16 +50,24 @@ class CreateCommunityAPIView(APIView):
 
             form_serializer = CreateCommunitySerializer(data=json.loads(request.data['form']))
             form_serializer.is_valid(raise_exception=True)
-            name, type, user = form_serializer.validated_data.values()
-
+            name, type, user, author = form_serializer.validated_data.values()
             file_serializer = FileSerializer(data=request.data)
             file_serializer.is_valid(raise_exception=True)
             file = file_serializer.validated_data['file']
 
-            Community.objects.create(file, user, name, type)
+            Community.objects.create(file, author, user, name, type)
+
+            result = Community.objects.retrieve_all(request.user.id, 0)
+            serializer = CommunitySerializer(result['communities'], many=True)
+
+
 
             return Response({
                                 'message': 'success',
+                                'communities': serializer.data,
+                                'page': result['page'],
+                                'has_next': result['has_next']
+
                             }, status=status.HTTP_200_OK)
        except ParseError:
             return Response({

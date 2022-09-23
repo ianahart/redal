@@ -70,3 +70,19 @@ body {
     display: inline-block;
   }
 }
+
+.overflow-scroll::-webkit-scrollbar {
+  width: 12px;
+}
+
+.overflow-scroll::-webkit-scrollbar-track {
+  box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3);
+  border-radius: 10px;
+  background: #1e293b;
+}
+
+.overflow-scroll::-webkit-scrollbar-thumb {
+  border-radius: 10px;
+  background: #444447;
+  box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.5);
+}

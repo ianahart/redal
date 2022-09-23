@@ -20,13 +20,21 @@ import {
   useState,
 } from 'react';
 import { createCommunityFormState } from '../helpers/data';
-import { ICreateCommunityForm, IUserContext } from '../interfaces';
+import {
+  ICommunityContext,
+  ICreateCommunityForm,
+  ICreateCommunityResponse,
+  IUserContext,
+} from '../interfaces';
 import { http } from '../helpers/utils';
 import { UserContext } from '../context/user';
 import Spinner from '../components/Mixed/Spinner';
+import { CommunityContext } from '../context/community';
 
 const CreateCommunity = () => {
   const { user } = useContext(UserContext) as IUserContext;
+  const { setCommunities, handleSetCommunities, setMenuHasNextPage, setMenuCurrentPage } =
+    useContext(CommunityContext) as ICommunityContext;
   const navigate = useNavigate();
   const [form, setForm] = useState<ICreateCommunityForm>(createCommunityFormState);
   const [file, setFile] = useState<File | null>(null);
@@ -88,7 +96,12 @@ const CreateCommunity = () => {
 
   const createFormData = () => {
     const formData = new FormData();
-    const formFields = { user: user.id, type: form.type.value, name: form.name.value };
+    const formFields = {
+      author: user.id,
+      user: user.id,
+      type: form.type.value,
+      name: form.name.value,
+    };
     if (file) {
       formData.append('file', file);
     }
@@ -118,10 +131,18 @@ const CreateCommunity = () => {
         setFormError('Please make sure to fill out all fields.');
         return;
       }
+
       const formData = createFormData();
-      const response = await http.post('/community/create/', formData, {
-        headers: { 'content-type': 'multipart/form-data' },
-      });
+      const response = await http.post<ICreateCommunityResponse>(
+        '/community/create/',
+        formData,
+        {
+          headers: { 'content-type': 'multipart/form-data' },
+        }
+      );
+      setCommunities(response.data.communities);
+      setMenuCurrentPage(response.data.page);
+      setMenuHasNextPage(response.data.has_next);
       setLoading(false);
       navigate('/redal');
     } catch (err: unknown | AxiosError) {

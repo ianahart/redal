@@ -24,6 +24,7 @@ import ProfileForm from './components/Settings/ProfileForm';
 import Notifications from './components/Settings/Notifications';
 import CreatePost from './pages/CreatePost';
 import CreateCommunity from './pages/CreateCommunity';
+import Community from './pages/Community';
 
 function App() {
   const { setUser, user } = useContext(UserContext) as IUserContext;
@@ -69,6 +70,7 @@ function App() {
                   </RequireAuth>
                 }
               />
+              <Route path="/redal/:username" element={<Community />} />
 
               <Route
                 path="/redal/create-community"
