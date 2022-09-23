@@ -32,6 +32,11 @@ export const tokenState = {
   refresh_token: tokens?.refresh_token ? tokens.refresh_token : '',
 };
 
+export const createCommunityFormState = {
+  name: { name: 'name', value: '', error: '' },
+  type: { name: 'type', value: '', error: '' },
+};
+
 export const profileFormState = {
   display_name: { name: 'display_name', value: '', error: '' },
   about: { name: 'about', value: '', error: '' },

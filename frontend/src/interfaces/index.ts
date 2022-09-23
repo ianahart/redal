@@ -16,6 +16,11 @@ export interface IProfileForm {
   about: { name: string; value: string; error: string };
 }
 
+export interface ICreateCommunityForm {
+  name: { name: string; value: string; error: string };
+  type: { name: string; value: string; error: string };
+}
+
 export interface IUser {
   avatar_url: string | null;
   email: string;
