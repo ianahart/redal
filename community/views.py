@@ -12,6 +12,7 @@ from rest_framework.response import Response
 from rest_framework.permissions import AllowAny, IsAuthenticated
 from rest_framework.parsers import FormParser, MultiPartParser
 from community.models import Community
+from member.models import Member
 from community.serializers import CommunityNameSerializer, CommunitySerializer, CreateCommunitySerializer, FileSerializer
 import json
 
@@ -91,7 +92,11 @@ class CreateCommunityAPIView(APIView):
             file_serializer.is_valid(raise_exception=True)
             file = file_serializer.validated_data['file']
 
-            Community.objects.create(file, author, user, name, type)
+            community = Community.objects.create(file, author, user, name, type)
+
+            print(community)
+            Member.objects.create(community, user)
+
 
             result = Community.objects.retrieve_all(request.user.id, 0)
             serializer = CommunitySerializer(result['communities'], many=True)

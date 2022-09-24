@@ -7,8 +7,8 @@ interface ICommunityListProps {
 
 const CommunityList = ({ communities }: ICommunityListProps) => {
   const navigate = useNavigate();
-  const navigateToCommunity = (slug: string, id: number) => {
-    navigate(`/redal/${slug}`, { state: { id } });
+  const navigateToCommunity = (community: ICommunity) => {
+    navigate(`/redal/${community.slug}`, { state: { community } });
   };
 
   return (
@@ -22,7 +22,7 @@ const CommunityList = ({ communities }: ICommunityListProps) => {
       {communities.map((community) => {
         return (
           <Box
-            onClick={() => navigateToCommunity(community.slug, community.id)}
+            onClick={() => navigateToCommunity(community)}
             key={community.id}
             display="flex"
             p="0 1rem 1rem 1rem"
