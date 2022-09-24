@@ -2,6 +2,13 @@ from rest_framework import serializers
 
 from community.models import Community
 
+
+
+class CommunityNameSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Community
+        fields = ('id', 'name', )
+
 class CommunitySerializer(serializers.ModelSerializer):
     class Meta:
         model = Community

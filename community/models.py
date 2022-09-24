@@ -11,9 +11,36 @@ logger = logging.getLogger('django')
 class CommunityManager(models.Manager):
 
 
+
+    def retrieve_names(self, user_id: int, page: int):
+        try:
+            objects = Community.objects.all().order_by('-id').filter(
+                user_id=user_id).filter(
+                type='public').only('id', 'name')
+
+            paginator = Paginator(objects, 4)
+
+            next_page = page + 1;
+            cur_page = paginator.page(next_page)
+
+            return {
+                'has_next': cur_page.has_next(),
+                'page': next_page,
+                'communities': cur_page.object_list
+            }
+        except DatabaseError:
+            logger.error('Unable to fetch community titles.')
+            return {
+                'has_next': False,
+                'page': 0,
+                'communities': []
+            }
+
+
+
     def retrieve_all(self, user_id: int, page: int):
         try:
-            objects = Community.objects.all().filter(user_id=user_id)
+            objects = Community.objects.all().order_by('-id').filter(user_id=user_id)
             paginator = Paginator(objects, 2)
 
             next_page = page + 1;

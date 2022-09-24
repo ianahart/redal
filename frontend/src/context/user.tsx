@@ -23,7 +23,6 @@ const UserContextProvider = ({ children }: IChildren) => {
   };
 
   const updateUser = (user: IUser) => {
-    console.log(user);
     setUser((prevState) => ({
       ...prevState,
       ...user,

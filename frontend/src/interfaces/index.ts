@@ -68,6 +68,18 @@ export interface ICommunity {
   slug: string;
 }
 
+export interface ICommunityName {
+  id: number;
+  name: string;
+}
+
+export interface ICreateCommunityPostResponse {
+  message?: string;
+  communities: ICommunityName[];
+  has_next: boolean;
+  page: number;
+}
+
 export interface IAuthorCommunityResponse {
   message?: string;
   communities: ICommunity[];

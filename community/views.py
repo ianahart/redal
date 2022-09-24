@@ -12,19 +12,55 @@ from rest_framework.response import Response
 from rest_framework.permissions import AllowAny, IsAuthenticated
 from rest_framework.parsers import FormParser, MultiPartParser
 from community.models import Community
-from community.serializers import CommunitySerializer, CreateCommunitySerializer, FileSerializer
+from community.serializers import CommunityNameSerializer, CommunitySerializer, CreateCommunitySerializer, FileSerializer
 import json
 
 
 
-class ListCreateAPIView(APIView):
+
+class ListCommunityNameAPIView(APIView):
+    permission_classes = [IsAuthenticated, ]
+
     def get(self, request):
         try:
             if 'page' not in request.query_params:
                raise NotFound
 
             page = request.query_params['page']
-            print(page)
+
+
+            result = Community.objects.retrieve_names(int(request.user.id), int(page))
+            serializer = CommunityNameSerializer(result['communities'], many=True)
+            return Response({
+                                'message': 'success',
+                                'communities': serializer.data,
+                                'page': result['page'],
+                                'has_next': result['has_next']
+                            }, status=status.HTTP_200_OK)
+
+
+
+
+
+            return Response({
+                                'message': 'success',
+                            }, status=status.HTTP_200_OK)
+        except NotFound as e:
+            return Response({
+                                'error': 'Unable to retreive communitiy titles.'
+                            }, status=status.HTTP_400_BAD_REQUEST)
+
+
+
+
+class ListCreateAPIView(APIView):
+    permission_classes = [IsAuthenticated, ]
+    def get(self, request):
+        try:
+            if 'page' not in request.query_params:
+               raise NotFound
+
+            page = request.query_params['page']
 
 
             result = Community.objects.retrieve_all(int(request.user.id), int(page))
