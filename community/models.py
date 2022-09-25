@@ -50,9 +50,9 @@ class CommunityManager(models.Manager):
 
     def retrieve_names(self, user_id: int, page: int):
         try:
-            objects = Community.objects.all().order_by('-id').filter(
-                user_id=user_id).filter(
-                type='public').only('id', 'name')
+            objects = Community.objects.select_related(
+                'user').all().order_by('-id').filter(
+                member_community__user_id=user_id)
 
             paginator = Paginator(objects, 4)
 

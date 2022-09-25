@@ -70,7 +70,14 @@ function App() {
                   </RequireAuth>
                 }
               />
-              <Route path="/redal/:username" element={<Community />} />
+              <Route
+                path="/redal/:name"
+                element={
+                  <RequireAuth>
+                    <Community />
+                  </RequireAuth>
+                }
+              />
 
               <Route
                 path="/redal/create-community"

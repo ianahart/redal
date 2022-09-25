@@ -3,6 +3,7 @@ import { useState, useCallback, useEffect, useContext } from 'react';
 import { useLocation } from 'react-router-dom';
 import { AxiosError } from 'axios';
 import { http } from '../helpers/utils';
+import CreatePostBtn from '../components/Community/CreatePostBtn';
 
 import {
   ICommunity,
@@ -54,6 +55,20 @@ const AuthorCommunity = () => {
         isMember={isMember}
         handleSetIsMember={handleSetIsMember}
       />
+      <Box
+        display="flex"
+        justifyContent="center"
+        border="1px solid green"
+        margin=" 3rem auto 2rem auto"
+        width={['95%', '95%', '750px']}
+      >
+        <CreatePostBtn
+          community={community}
+          avatar_url={user.avatar_url}
+          initials={user.initials}
+          color={user.color}
+        />
+      </Box>
     </Box>
   );
 };

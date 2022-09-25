@@ -110,7 +110,7 @@ const CommunityHeader = ({
   };
 
   return (
-    <Box minH="100vh">
+    <Box>
       <Box height="80px" bg="blue.tertiary"></Box>
       <Box
         justifyContent="center"

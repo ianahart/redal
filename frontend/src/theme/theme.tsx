@@ -8,6 +8,9 @@ export const theme = extendTheme({
     //    Button,
   },
   colors: {
+    border: {
+      primary: '#e4e4e6',
+    },
     black: {
       primary: '#181717',
       secondary: '#200F21',

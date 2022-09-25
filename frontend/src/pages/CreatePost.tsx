@@ -13,7 +13,7 @@ import { BsChevronDown } from 'react-icons/bs';
 import ReactQuill from 'react-quill';
 import 'react-quill/dist/quill.snow.css';
 import { UserContext } from '../context/user';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
 import { http } from '../helpers/utils';
 import { useEffectOnce } from '../hooks/UseEffectOnce';
 import {
@@ -23,6 +23,7 @@ import {
 } from '../interfaces';
 
 const CreatePost = () => {
+  const location = useLocation();
   const navigate = useNavigate();
   const { user } = useContext(UserContext) as IUserContext;
   const quillRef = useRef<ReactQuill>(null);
@@ -36,8 +37,18 @@ const CreatePost = () => {
   const [page, setPage] = useState(1);
   const [hasNext, setHasNext] = useState(false);
   const [nameError, setNameError] = useState('');
-
   const [fileError, setFileError] = useState('');
+
+  useEffect(() => {
+    if (location?.state) {
+      setActiveName((prevState) => ({
+        ...prevState,
+        id: location.state.id,
+        name: location.state.name,
+      }));
+    }
+  }, [location.state]);
+
   const uploadService = async (formData: FormData) => {
     try {
       const response = await http.post('/posts/upload/', formData);
