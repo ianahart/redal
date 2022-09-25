@@ -1,9 +1,3 @@
-from django.shortcuts import render
-
-from django.core.exceptions import BadRequest, ObjectDoesNotExist
-from django.db import DatabaseError
-from django.contrib.auth.hashers import check_password
-from rest_framework.decorators import authentication_classes, permission_classes
 from rest_framework.parsers import FormParser, MultiPartParser
 from rest_framework.exceptions import NotFound, ParseError
 from rest_framework.views import APIView
@@ -13,8 +7,39 @@ from rest_framework.permissions import AllowAny, IsAuthenticated
 from rest_framework.parsers import FormParser, MultiPartParser
 from community.models import Community
 from member.models import Member
-from community.serializers import CommunityNameSerializer, CommunitySerializer, CreateCommunitySerializer, FileSerializer
+from community.serializers import CommunityNameSerializer, CommunitySearchSerializer, CommunitySerializer, CreateCommunitySerializer, FileSerializer
 import json
+
+class SearchCommunityAPIView(APIView):
+    permission_classes = [AllowAny, ]
+
+    def post(self, request):
+        try:
+
+            serializer = CommunitySearchSerializer(data=request.data)
+            serializer.is_valid(raise_exception=True)
+
+            if 'page' not in request.query_params:
+                raise ParseError
+
+            results = Community.objects.search_results(
+                serializer.validated_data,
+                request.query_params['page'])
+
+            community_serializer = CommunitySerializer(results['communities'], many=True)
+
+            return Response({
+                                'message': 'success',
+                                'has_next': results['has_next'],
+                                'page': results['page'],
+                                'communities': community_serializer.data
+                            }, status=status.HTTP_200_OK)
+
+        except ParseError:
+            return Response({
+                                'error': 'No results found.'
+                            }, status=status.HTTP_404_NOT_FOUND)
+
 
 
 

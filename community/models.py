@@ -1,5 +1,6 @@
 from django.db import  DatabaseError, models
 from django.utils import timezone
+from typing import Dict, Any
 from django.core.paginator import Paginator
 from slugify import slugify #type:ignore
 from account.models import CustomUser
@@ -10,6 +11,31 @@ logger = logging.getLogger('django')
 
 class CommunityManager(models.Manager):
 
+
+    def search_results(self, data: Dict[str, str], page: int):
+        try:
+
+            objects = Community.objects.all().filter(
+                name__icontains=data['value'])
+
+            paginator = Paginator(objects, 2)
+            next_page = int(page) + 1
+
+            cur_page = paginator.page(next_page)
+
+            return {
+                'has_next': cur_page.has_next(),
+                'page': next_page,
+                'communities': cur_page.object_list
+            }
+
+        except DatabaseError:
+            logger.error('Unable to retrieve seach results for communities.')
+            return {
+                'has_next': False,
+                'page': 0,
+                'communities': []
+            }
 
 
     def retrieve_names(self, user_id: int, page: int):

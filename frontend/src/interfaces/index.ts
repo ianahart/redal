@@ -94,6 +94,13 @@ export interface ICreateCommunityResponse {
   page: number;
 }
 
+export interface ISearchCommunityResponse {
+  message?: string;
+  communities: ICommunity[];
+  has_next: boolean;
+  page: number;
+}
+
 export interface ICommunityContext {
   communities: ICommunity[];
   handleSetCommunities: (communities: ICommunity[]) => void;

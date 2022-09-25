@@ -4,6 +4,12 @@ from community.models import Community
 
 
 
+class CommunitySearchSerializer(serializers.Serializer):
+    value = serializers.CharField(max_length=200)
+    class Meta:
+        model = Community
+        fields = ('value', )
+
 class CommunityNameSerializer(serializers.ModelSerializer):
     class Meta:
         model = Community
