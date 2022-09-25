@@ -1,6 +1,7 @@
 from rest_framework import serializers
 
 from community.models import Community
+from member.serializers import MemberSerializer
 
 
 

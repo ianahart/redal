@@ -7,8 +7,39 @@ from rest_framework.permissions import AllowAny, IsAuthenticated
 from rest_framework.parsers import FormParser, MultiPartParser
 from community.models import Community
 from member.models import Member
+from account.permissions import AccountPermission
 from community.serializers import CommunityNameSerializer, CommunitySearchSerializer, CommunitySerializer, CreateCommunitySerializer, FileSerializer
 import json
+
+
+
+
+class DetailsAPIView(APIView):
+    permission_classes = [IsAuthenticated, AccountPermission, ]
+
+    def get(self, request, pk: int):
+        try:
+
+            community = Community.objects.get_community(pk, request.user.id)
+            if community is None:
+                raise NotFound('This community does not exist anymore.')
+
+
+            is_member = Member.objects.is_member(pk, request.user.id)
+
+            serializer = CommunitySerializer(community)
+
+
+            return Response({
+                                'message': 'success',
+                                'community': serializer.data,
+                                'is_member': is_member
+
+                            }, status=status.HTTP_200_OK)
+        except NotFound as e:
+            return Response({
+                                'error': e.detail,
+                            }, status=status.HTTP_404_NOT_FOUND)
 
 class SearchCommunityAPIView(APIView):
     permission_classes = [AllowAny, ]

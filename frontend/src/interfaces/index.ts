@@ -21,6 +21,17 @@ export interface ICreateCommunityForm {
   type: { name: string; value: string; error: string };
 }
 
+export interface IMember {
+  id: number;
+  community_id: number;
+  user_id: number;
+}
+
+export interface IRtrieveMemberResponse {
+  message?: string;
+  member: IMember;
+}
+
 export interface IUser {
   avatar_url: string | null;
   email: string;
@@ -99,6 +110,12 @@ export interface ISearchCommunityResponse {
   communities: ICommunity[];
   has_next: boolean;
   page: number;
+}
+
+export interface IRetrieveCommunityResponse {
+  community: ICommunity;
+  is_member: boolean;
+  message?: string;
 }
 
 export interface ICommunityContext {

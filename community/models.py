@@ -4,6 +4,7 @@ from typing import Dict, Any
 from django.core.paginator import Paginator
 from slugify import slugify #type:ignore
 from account.models import CustomUser
+from member.models import Member
 from services.file_upload import FileUpload
 import random
 import logging
@@ -12,10 +13,19 @@ logger = logging.getLogger('django')
 class CommunityManager(models.Manager):
 
 
+    def get_community(self, pk: int, user_id: int):
+        try:
+            community = Community.objects.get(pk=pk)
+            return community
+        except:
+            logger.error('Unable to retrieve community by it\'s id.')
+
+
+
     def search_results(self, data: Dict[str, str], page: int):
         try:
 
-            objects = Community.objects.all().filter(
+            objects = Community.objects.all().order_by('-id').filter(
                 name__icontains=data['value'])
 
             paginator = Paginator(objects, 2)
@@ -62,11 +72,12 @@ class CommunityManager(models.Manager):
                 'communities': []
             }
 
-
-
     def retrieve_all(self, user_id: int, page: int):
         try:
-            objects = Community.objects.all().order_by('-id').filter(user_id=user_id)
+            objects = Community.objects.select_related(
+                'user').all().order_by('-id').filter(
+                member_community__user_id=user_id)
+
             paginator = Paginator(objects, 2)
 
             next_page = page + 1;
@@ -118,7 +129,7 @@ class Community(models.Model):
         ('private', 'Private')
     )
 
-    name = models.CharField(max_length=200)
+    name = models.CharField(max_length=200, unique=True)
     type = models.CharField(max_length=10, choices=TYPE_CHOICES)
     image_url = models.URLField(blank=True, null=True)
     slug = models.CharField(max_length=200, blank=True, null=True)

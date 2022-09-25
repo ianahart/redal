@@ -1,19 +1,44 @@
 from django.db import DatabaseError, models
 from django.utils import timezone
 import logging
-from account.models import CustomUser
 
-from community.models import Community
 logger = logging.getLogger('django')
 
 class MemberManager(models.Manager):
-    def create(self, community: 'Community', user: 'CustomUser'):
+
+
+
+
+    def get_by_community(self, user_id: int, community_id: int):
+        try:
+           return Member.objects.all().filter(
+                user_id=user_id).filter(
+                community_id=community_id).first()
+
+        except DatabaseError:
+            logger.error('Unable to retrieve member by community id')
+            return None
+
+
+    def is_member(self, community_id: int, user_id: int):
+        try:
+            member = Member.objects.all().filter(
+                community_id=community_id).filter(
+                user_id=user_id).only('id').first()
+
+            return True if member else False
+
+        except DatabaseError:
+            return False
+            logger.error('Unable to determine if user is_member of a community.')
+
+
+    def create(self, community, user):
         try:
             member = self.model(community=community, user=user)
 
             member.save()
         except DatabaseError as e:
-            print(e)
             logger.error('Unable to create a member for a community.')
 
 

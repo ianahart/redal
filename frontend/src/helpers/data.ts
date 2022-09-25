@@ -8,9 +8,25 @@ export const createAccountState = {
   confirm_password: { name: 'confirm_password', value: '', error: '', type: 'password' },
 };
 
+export const memberState = {
+  id: 0,
+  community_id: 0,
+  user_id: 0,
+};
+
 export const loginState = {
   email: { name: 'email', value: '', error: '', type: 'email' },
   password: { name: 'password', value: '', error: '', type: 'password' },
+};
+
+export const communityState = {
+  author_id: 0,
+  id: 0,
+  image_url: '',
+  name: '',
+  slug: '',
+  type: '',
+  user_id: 0,
 };
 
 export const userState = {

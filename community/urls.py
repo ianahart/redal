@@ -5,6 +5,7 @@ urlpatterns = [
     path('community/names/', views.ListCommunityNameAPIView.as_view()),
     path('community/search/', views.SearchCommunityAPIView.as_view()),
     path('community/', views.ListCreateAPIView.as_view()),
+    path('community/<int:pk>/', views.DetailsAPIView.as_view()),
 ]
 
 
