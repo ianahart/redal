@@ -21,6 +21,24 @@ export interface ICreateCommunityForm {
   type: { name: string; value: string; error: string };
 }
 
+export interface IPost {
+  id: number;
+  avatar_url: string | null;
+  initials: string;
+  title: string;
+  comment_count: number;
+  display_date: string;
+  name: string;
+  upvote_count: number;
+}
+
+export interface IPostsResponse {
+  message?: string;
+  has_next: boolean;
+  page: number;
+  posts: IPost[];
+}
+
 export interface IMember {
   id: number;
   community_id: number;

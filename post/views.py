@@ -1,10 +1,3 @@
-from django.shortcuts import render
-
-from django.core.exceptions import BadRequest, ObjectDoesNotExist
-from django.db import DatabaseError
-from django.contrib.auth.hashers import check_password
-from rest_framework.decorators import authentication_classes, permission_classes
-from rest_framework.parsers import FormParser, MultiPartParser
 from rest_framework.exceptions import NotFound, ParseError
 from rest_framework.views import APIView
 from rest_framework import status
@@ -13,8 +6,7 @@ from rest_framework.permissions import AllowAny, IsAuthenticated
 from rest_framework.parsers import FormParser, MultiPartParser
 from post.models import Post
 from services.file_upload import FileUpload
-from post.serializers import FileSerializer, PostCreateSerializer
-import json
+from post.serializers import FileSerializer, PostCreateSerializer, PostsSerializer
 
 
 
@@ -40,6 +32,33 @@ class CreatePhotoAPIView(APIView):
 
 class ListCreateAPIView(APIView):
     permission_classes = [IsAuthenticated, ]
+
+
+    def get(self, request):
+        try:
+            params = request.query_params
+            if 'sort' not in params or 'page' not in params:
+                raise NotFound('Unable to load posts right now.')
+            sort, page, id, = request.query_params.values()
+
+            result = Post.objects.retrieve_posts(sort, page, id)
+            if result:
+                serializer = PostsSerializer(result['posts'], many=True)
+                return Response({
+                                    'message': 'success',
+                                    'has_next': result['has_next'],
+                                    'page': result['page'],
+                                    'posts': serializer.data
+                                }, status=status.HTTP_200_OK)
+
+            else:
+                raise NotFound('Something went wrong getting posts.')
+        except NotFound as e:
+            return Response({
+                                'error': e.detail,
+                            }, status=status.HTTP_404_NOT_FOUND)
+
+
     def post(self, request):
         serializer = PostCreateSerializer(data=request.data)
         serializer.is_valid(raise_exception=True)

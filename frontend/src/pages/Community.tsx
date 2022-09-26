@@ -4,6 +4,7 @@ import { useLocation } from 'react-router-dom';
 import { AxiosError } from 'axios';
 import { http } from '../helpers/utils';
 import CreatePostBtn from '../components/Community/CreatePostBtn';
+import Posts from '../components/Community/Posts';
 
 import {
   ICommunity,
@@ -58,7 +59,7 @@ const AuthorCommunity = () => {
       <Box
         display="flex"
         justifyContent="center"
-        border="1px solid green"
+        flexDir="column"
         margin=" 3rem auto 2rem auto"
         width={['95%', '95%', '750px']}
       >
@@ -68,6 +69,7 @@ const AuthorCommunity = () => {
           initials={user.initials}
           color={user.color}
         />
+        <Posts community={community} />
       </Box>
     </Box>
   );

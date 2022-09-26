@@ -53,6 +53,8 @@ INSTALLED_APPS = [
     'community',
     'post',
     'member',
+    'upvote',
+    'comment',
 ]
 
 
