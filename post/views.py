@@ -41,7 +41,7 @@ class ListCreateAPIView(APIView):
                 raise NotFound('Unable to load posts right now.')
             sort, page, id, = request.query_params.values()
 
-            result = Post.objects.retrieve_posts(sort, page, id)
+            result = Post.objects.retrieve_posts(sort, page, id, request.user.id)
             if result:
                 serializer = PostsSerializer(result['posts'], many=True)
                 return Response({

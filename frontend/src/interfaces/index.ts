@@ -30,6 +30,7 @@ export interface IPost {
   display_date: string;
   name: string;
   upvote_count: number;
+  user_upvoted: string | null;
 }
 
 export interface IPostsResponse {

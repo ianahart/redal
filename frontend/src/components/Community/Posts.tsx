@@ -10,8 +10,8 @@ import {
   Image,
   Heading,
 } from '@chakra-ui/react';
-import { useEffect, useState } from 'react';
-import { ICommunity, IPost, IPostsResponse } from '../../interfaces';
+import { useContext, useEffect, useState } from 'react';
+import { ICommunity, IPost, IPostsResponse, IUserContext } from '../../interfaces';
 import { AiOutlineBars, AiOutlineFire } from 'react-icons/ai';
 import InfiniteScroll from 'react-infinite-scroller';
 import {
@@ -28,12 +28,14 @@ import { ImArrowDown, ImArrowUp } from 'react-icons/im';
 import { AxiosError } from 'axios';
 import { http } from '../../helpers/utils';
 import { useEffectOnce } from '../../hooks/UseEffectOnce';
+import { UserContext } from '../../context/user';
 
 interface IPostsProps {
   community: ICommunity;
 }
 
 const Posts = ({ community }: IPostsProps) => {
+  const { user } = useContext(UserContext) as IUserContext;
   // hot(comments), new (date), top (upvotes)
   const [filter, setFilter] = useState('new');
   const [posts, setPosts] = useState<IPost[]>([]);
@@ -87,6 +89,67 @@ const Posts = ({ community }: IPostsProps) => {
         console.log(err.response);
       }
     }
+  };
+
+  const downVotePost = async (
+    e: React.MouseEvent<HTMLDivElement>,
+    postId: number,
+    action: string
+  ) => {
+    e.stopPropagation();
+    const response = await http.post('/upvotes/', {
+      user: user.id,
+      post: postId,
+      action: 'downvoted',
+    });
+
+    const updated = posts.map((post) => {
+      if (post.id === postId) {
+        if (post.user_upvoted === 'upvoted') {
+          return post;
+        }
+        if (post.user_upvoted === null) {
+          post.upvote_count = post.upvote_count - 1;
+          post.user_upvoted = 'downvoted';
+        } else {
+          post.upvote_count = post.upvote_count + 1;
+          post.user_upvoted = null;
+        }
+      }
+      return post;
+    });
+
+    setPosts(updated);
+  };
+
+  const upVotePost = async (
+    e: React.MouseEvent<HTMLDivElement>,
+    postId: number,
+    action: string
+  ) => {
+    const updated = posts.map((post) => {
+      if (post.user_upvoted === 'downvoted') {
+        return post;
+      }
+      if (post.id === postId) {
+        if (post.user_upvoted === null) {
+          post.upvote_count = post.upvote_count + 1;
+          post.user_upvoted = 'upvoted';
+        } else {
+          post.upvote_count = post.upvote_count - 1;
+          post.user_upvoted = null;
+        }
+      }
+      return post;
+    });
+
+    setPosts(updated);
+    const response = await http.post('/upvotes/', {
+      user: user.id,
+      post: postId,
+      action: 'upvoted',
+    });
+    e.stopPropagation();
   };
 
   return (
@@ -158,7 +221,7 @@ const Posts = ({ community }: IPostsProps) => {
                 </Box>
               )}
               <MenuButton as={Button} rightIcon={<BsChevronDown />}>
-                Actions
+                {postStyle}
               </MenuButton>
             </Box>
             <MenuList>
@@ -206,14 +269,24 @@ const Posts = ({ community }: IPostsProps) => {
                       display="flex"
                       flexDir="column"
                     >
-                      <Box cursor="pointer">
-                        <ImArrowUp color="#8a8f9d" />
+                      <Box
+                        onClick={(e) => upVotePost(e, post.id, 'add')}
+                        cursor="pointer"
+                      >
+                        <ImArrowUp
+                          color={post.user_upvoted === 'upvoted' ? '#0080FF' : '#8a8f9d'}
+                        />
                       </Box>
                       <Box>
                         <Text>{post.upvote_count}</Text>
                       </Box>
-                      <Box cursor="pointer">
-                        <ImArrowDown color="#8a8f9d" />
+                      <Box
+                        onClick={(e) => downVotePost(e, post.id, 'subtract')}
+                        cursor="pointer"
+                      >
+                        <ImArrowDown
+                          color={post.user_upvoted === 'downvoted' ? 'orange' : '#8a8f9d'}
+                        />
                       </Box>
                     </Box>
                     <Box flexGrow="2" width="90%">

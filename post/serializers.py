@@ -10,11 +10,13 @@ class PostsSerializer(serializers.ModelSerializer):
     display_date = serializers.CharField()
     comment_count = serializers.IntegerField()
     upvote_count = serializers.IntegerField()
+    user_upvoted = serializers.CharField()
 
     class Meta:
         model = Post
         fields = ('id', 'avatar_url', 'initials', 'upvote_count',
                   'title', 'name', 'display_date', 'comment_count',
+                  'user_upvoted',
                   )
 
 

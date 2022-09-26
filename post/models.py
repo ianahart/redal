@@ -9,6 +9,8 @@ import logging
 import time
 import base64
 import datetime
+
+from upvote.models import UpVote
 logger = logging.getLogger('django')
 
 class PostManager(models.Manager):
@@ -29,21 +31,21 @@ class PostManager(models.Manager):
             logger.error('Unable to create a community post.')
 
 
-    def retrieve_posts(self, sort: str, page: int, community_id):
+    def retrieve_posts(self, sort: str, page: int, community_id, user_id):
         try:
             result = None
             match sort:
                 case 'new':
-                    result = self.__get_new(sort, page, community_id)
+                    result = self.__get_new(sort, page, community_id, user_id)
 
                 case 'hot':
-                    result = self.__get_hot(sort, page, community_id)
+                    result = self.__get_hot(sort, page, community_id, user_id)
 
                 case 'top':
-                    result = self.__get_top(sort, page, community_id)
+                    result = self.__get_top(sort, page, community_id, user_id)
 
                 case other:
-                   result = self.__get_new('new', 0, community_id)
+                   result = self.__get_new('new', 0, community_id, user_id)
 
             return result
         except DatabaseError:
@@ -71,7 +73,12 @@ class PostManager(models.Manager):
         return display_date
 
 
-    def __add_foreign_fields(self, objects):
+    def __check_user_upvoted(self, post_id: int, user_id: int):
+        upvote = UpVote.objects.all().filter(
+            post_id=post_id).filter(user_id=user_id).first()
+        return upvote.action if upvote is not None and upvote.action is not None else None
+
+    def __add_foreign_fields(self, objects, user_id: int):
             for object in objects:
                 if object.user.display_name:
                     object.name = object.user.display_name
@@ -80,14 +87,15 @@ class PostManager(models.Manager):
                 object.display_date = self.__get_display_date(
                                   round(object.created_at.timestamp()))
                 object.comment_count = object.comment_post.count()
-                object.upvote_count = object.upvote_post.count()
+                object.upvote_count = object.upvote_post.filter(action='upvoted').count()
+                object.user_upvoted = self.__check_user_upvoted(object.id, user_id)
 
 
-    def __get_new(self, sort: str, page: int, community_id):
+    def __get_new(self, sort: str, page: int, community_id, user_id: int):
         try:
             objects = Post.objects.all().order_by('-id').filter(community_id=community_id)
 
-            self.__add_foreign_fields(objects)
+            self.__add_foreign_fields(objects, user_id)
 
             paginator = Paginator(objects, 3)
             next_page = int(page) + 1
@@ -110,14 +118,14 @@ class PostManager(models.Manager):
 
 
 
-    def __get_hot(self, sort: str, page: int, community_id):
+    def __get_hot(self, sort: str, page: int, community_id, user_id: int):
         try:
             print('get hot')
         except DatabaseError:
             logger.error('Unable to retrieve hot posts.')
 
 
-    def __get_top(self,sort: str, page: int, community_id):
+    def __get_top(self,sort: str, page: int, community_id, user_id: int):
         try:
             print('get top')
         except DatabaseError:
