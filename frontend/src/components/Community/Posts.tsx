@@ -64,8 +64,8 @@ const Posts = ({ community }: IPostsProps) => {
       setHasNext(response.data.has_next);
     } catch (err: unknown | AxiosError) {
       if (err instanceof AxiosError && err.response) {
-        console.log(err.response);
         setError(err.response.data.error);
+        return;
       }
     }
   };
@@ -86,7 +86,7 @@ const Posts = ({ community }: IPostsProps) => {
       setHasNext(response.data.has_next);
     } catch (err: unknown | AxiosError) {
       if (err instanceof AxiosError && err.response) {
-        console.log(err.response);
+        return;
       }
     }
   };
@@ -136,7 +136,6 @@ const Posts = ({ community }: IPostsProps) => {
     const updated = posts.map((post) => {
       if (post.id === postId) {
         if (post.user_upvoted === 'downvoted') {
-          console.log('SHOULD NOT SEND REQUESTR');
           shouldSendRequest = false;
           return post;
         }
@@ -153,7 +152,6 @@ const Posts = ({ community }: IPostsProps) => {
 
     setPosts(updated);
     if (shouldSendRequest) {
-      console.log('SHOULD ESND REQUEST');
       await http.post('/upvotes/', {
         user: user.id,
         post: postId,

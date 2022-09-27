@@ -1,4 +1,5 @@
 from django.db import models
+from django.db.models import CharField, Count, Case, When
 from django.core.paginator import Paginator
 from django.utils import timezone
 from typing import Any, Dict
@@ -129,7 +130,33 @@ class PostManager(models.Manager):
 
     def __get_top(self,sort: str, page: int, community_id, user_id: int):
         try:
-            print('get top')
+
+        #    objects = Post.objects.all().filter(
+        #        community_id=community_id).filter(
+        #        upvote_post__action='upvoted'
+        #    )
+
+
+
+            objects = Post.objects.all().filter(
+                community_id=community_id).annotate(
+            relevancy=Count(
+                    Case(When(upvote_post__action='upvoted', then=1)))
+            ).order_by('-relevancy')
+
+
+            self.__add_foreign_fields(objects, user_id)
+
+            paginator = Paginator(objects, 3)
+            next_page = int(page) + 1
+            cur_page = paginator.page(next_page)
+
+            return {
+                'posts': cur_page.object_list,
+                'has_next': cur_page.has_next(),
+                'page': next_page,
+            }
+
         except DatabaseError:
             logger.error('Unable to retrieve top posts.')
 
