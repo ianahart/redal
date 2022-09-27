@@ -97,15 +97,11 @@ const Posts = ({ community }: IPostsProps) => {
     action: string
   ) => {
     e.stopPropagation();
-    const response = await http.post('/upvotes/', {
-      user: user.id,
-      post: postId,
-      action: 'downvoted',
-    });
-
+    let shouldSendRequest = true;
     const updated = posts.map((post) => {
       if (post.id === postId) {
         if (post.user_upvoted === 'upvoted') {
+          shouldSendRequest = false;
           return post;
         }
         if (post.user_upvoted === null) {
@@ -120,6 +116,13 @@ const Posts = ({ community }: IPostsProps) => {
     });
 
     setPosts(updated);
+    if (shouldSendRequest) {
+      await http.post('/upvotes/', {
+        user: user.id,
+        post: postId,
+        action: 'downvoted',
+      });
+    }
   };
 
   const upVotePost = async (
@@ -127,11 +130,16 @@ const Posts = ({ community }: IPostsProps) => {
     postId: number,
     action: string
   ) => {
+    e.stopPropagation();
+
+    let shouldSendRequest = true;
     const updated = posts.map((post) => {
-      if (post.user_upvoted === 'downvoted') {
-        return post;
-      }
       if (post.id === postId) {
+        if (post.user_upvoted === 'downvoted') {
+          console.log('SHOULD NOT SEND REQUESTR');
+          shouldSendRequest = false;
+          return post;
+        }
         if (post.user_upvoted === null) {
           post.upvote_count = post.upvote_count + 1;
           post.user_upvoted = 'upvoted';
@@ -144,12 +152,14 @@ const Posts = ({ community }: IPostsProps) => {
     });
 
     setPosts(updated);
-    const response = await http.post('/upvotes/', {
-      user: user.id,
-      post: postId,
-      action: 'upvoted',
-    });
-    e.stopPropagation();
+    if (shouldSendRequest) {
+      console.log('SHOULD ESND REQUEST');
+      await http.post('/upvotes/', {
+        user: user.id,
+        post: postId,
+        action: 'upvoted',
+      });
+    }
   };
 
   return (

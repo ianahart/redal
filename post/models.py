@@ -87,7 +87,9 @@ class PostManager(models.Manager):
                 object.display_date = self.__get_display_date(
                                   round(object.created_at.timestamp()))
                 object.comment_count = object.comment_post.count()
-                object.upvote_count = object.upvote_post.filter(action='upvoted').count()
+                upvoted = object.upvote_post.filter(action='upvoted').count()
+                downvoted = object.upvote_post.filter(action='downvoted').count()
+                object.upvote_count = upvoted - downvoted
                 object.user_upvoted = self.__check_user_upvoted(object.id, user_id)
 
 
