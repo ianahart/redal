@@ -131,13 +131,6 @@ class PostManager(models.Manager):
     def __get_top(self,sort: str, page: int, community_id, user_id: int):
         try:
 
-        #    objects = Post.objects.all().filter(
-        #        community_id=community_id).filter(
-        #        upvote_post__action='upvoted'
-        #    )
-
-
-
             objects = Post.objects.all().filter(
                 community_id=community_id).annotate(
             relevancy=Count(

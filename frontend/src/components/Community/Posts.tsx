@@ -230,7 +230,7 @@ const Posts = ({ community }: IPostsProps) => {
             loadMore={loadMore}
             hasMore={hasNext}
             loader={
-              <div className="loader" key={0}>
+              <div style={{ margin: '0 auto' }} className="loader" key={0}>
                 <Spinner height="70px" width="70px" />
               </div>
             }

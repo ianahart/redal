@@ -25,6 +25,7 @@ import Notifications from './components/Settings/Notifications';
 import CreatePost from './pages/CreatePost';
 import CreateCommunity from './pages/CreateCommunity';
 import Community from './pages/Community';
+import FullPost from './pages/FullPost';
 
 function App() {
   const { setUser, user } = useContext(UserContext) as IUserContext;
@@ -84,6 +85,15 @@ function App() {
                 element={
                   <RequireAuth>
                     <CreateCommunity />
+                  </RequireAuth>
+                }
+              />
+
+              <Route
+                path="/redal/posts/:postId"
+                element={
+                  <RequireAuth>
+                    <FullPost />
                   </RequireAuth>
                 }
               />

@@ -6,9 +6,22 @@ from rest_framework.permissions import AllowAny, IsAuthenticated
 from rest_framework.parsers import FormParser, MultiPartParser
 from post.models import Post
 from services.file_upload import FileUpload
+from account.permissions import AccountPermission
 from post.serializers import FileSerializer, PostCreateSerializer, PostsSerializer
 
 
+class DetailsAPIView(APIView):
+    permission_classes = [IsAuthenticated, AccountPermission, ]
+
+    def get(self, request, pk: int):
+        try:
+            return Response({
+                                'message': 'success'
+                            }, status=status.HTTP_200_OK)
+        except NotFound:
+            return Response({
+                                'error': 'Post not found or is unavailable.'
+                            }, status=status.HTTP_404_NOT_FOUND)
 
 class CreatePhotoAPIView(APIView):
     def post(self ,request):

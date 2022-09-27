@@ -4,6 +4,7 @@ import { ImArrowUp, ImArrowDown } from 'react-icons/im';
 import { BiComment } from 'react-icons/bi';
 import { BsBookmark, BsThreeDots } from 'react-icons/bs';
 import { MouseEvent } from 'react';
+import { Link as RouterLink } from 'react-router-dom';
 
 interface IPostProps {
   postStyle: string;
@@ -97,9 +98,11 @@ const Post = ({ postStyle, post, upVotePost, downVotePost }: IPostProps) => {
           )}
           <Box display={postStyle === 'card' ? 'block' : 'flex'}>
             <Box textAlign="left" cursor="pointer">
-              <Heading fontSize="1.4rem" mx="0.25rem" color="text.primary">
-                {post.title}
-              </Heading>
+              <RouterLink to={`/redal/posts/${post.id}`}>
+                <Heading fontSize="1.4rem" mx="0.25rem" color="text.primary">
+                  {post.title}
+                </Heading>
+              </RouterLink>
             </Box>
             <Box
               display="flex"
