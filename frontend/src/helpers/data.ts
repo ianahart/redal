@@ -57,3 +57,16 @@ export const profileFormState = {
   display_name: { name: 'display_name', value: '', error: '' },
   about: { name: 'about', value: '', error: '' },
 };
+
+export const postState = {
+  avatar_url: '',
+  comment_count: 0,
+  display_date: '',
+  id: 0,
+  initials: '',
+  name: '',
+  post: '',
+  title: '',
+  upvote_count: 0,
+  user_upvoted: null,
+};

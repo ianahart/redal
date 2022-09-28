@@ -7,7 +7,7 @@ from rest_framework.parsers import FormParser, MultiPartParser
 from post.models import Post
 from services.file_upload import FileUpload
 from account.permissions import AccountPermission
-from post.serializers import FileSerializer, PostCreateSerializer, PostsSerializer
+from post.serializers import FileSerializer, PostCreateSerializer, PostSerializer, PostsSerializer
 
 
 class DetailsAPIView(APIView):
@@ -15,12 +15,20 @@ class DetailsAPIView(APIView):
 
     def get(self, request, pk: int):
         try:
+            posts = Post.objects.retrieve_post(pk, request.user.id)
+
+            if len(posts) == 0: #type:ignore
+                raise NotFound('Post not found or is no longer available.')
+
+            if posts:
+                serializer = PostSerializer(posts[0])
+                return Response({
+                                    'message': 'success',
+                                    'post': serializer.data,
+                                }, status=status.HTTP_200_OK)
+        except NotFound as e:
             return Response({
-                                'message': 'success'
-                            }, status=status.HTTP_200_OK)
-        except NotFound:
-            return Response({
-                                'error': 'Post not found or is unavailable.'
+                                'error': e.detail
                             }, status=status.HTTP_404_NOT_FOUND)
 
 class CreatePhotoAPIView(APIView):

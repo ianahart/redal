@@ -79,6 +79,16 @@ class PostManager(models.Manager):
             post_id=post_id).filter(user_id=user_id).first()
         return upvote.action if upvote is not None and upvote.action is not None else None
 
+
+
+    def retrieve_post(self, post_id: int, user_id: int):
+        try:
+           posts = [Post.objects.get(pk=post_id)]
+           self.__add_foreign_fields(posts, user_id)
+           return posts
+        except DatabaseError:
+            logger.error('Unable to retrieve a single post.')
+
     def __add_foreign_fields(self, objects, user_id: int):
             for object in objects:
                 if object.user.display_name:

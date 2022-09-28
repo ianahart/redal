@@ -3,6 +3,20 @@ from rest_framework import serializers
 from post.models import Post
 
 
+class PostSerializer(serializers.ModelSerializer):
+    name = serializers.CharField()
+    display_date = serializers.CharField()
+    comment_count = serializers.IntegerField()
+    upvote_count = serializers.IntegerField()
+    user_upvoted = serializers.CharField()
+
+    class Meta:
+        model = Post
+        fields = ('id', 'avatar_url', 'initials', 'upvote_count',
+                  'title', 'name', 'display_date', 'comment_count',
+                  'user_upvoted', 'post',
+                  )
+
 
 
 class PostsSerializer(serializers.ModelSerializer):

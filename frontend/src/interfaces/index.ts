@@ -1,3 +1,5 @@
+import { Value } from 'react-quill';
+
 export interface ICreateAccountForm {
   first_name: { name: string; value: string; error: string; type: string };
   last_name: { name: string; value: string; error: string; type: string };
@@ -31,6 +33,10 @@ export interface IPost {
   name: string;
   upvote_count: number;
   user_upvoted: string | null;
+}
+
+export interface IFullPost extends IPost {
+  post: Value;
 }
 
 export interface IPostsResponse {
