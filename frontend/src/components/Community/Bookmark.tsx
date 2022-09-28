@@ -7,17 +7,10 @@ interface IBookmarkProps {
   postId: number;
   userId: number;
   userBookmarked: boolean;
-  bookmarkId: number;
   updateBookmark: (action: string) => void;
 }
 
-const Bookmark = ({
-  postId,
-  userId,
-  userBookmarked,
-  bookmarkId,
-  updateBookmark,
-}: IBookmarkProps) => {
+const Bookmark = ({ postId, userId, userBookmarked, updateBookmark }: IBookmarkProps) => {
   const addBookmark = async () => {
     try {
       updateBookmark('add');
@@ -35,7 +28,7 @@ const Bookmark = ({
   const removeBookmark = async () => {
     try {
       updateBookmark('delete');
-      await http.delete(`/bookmarks/${postId}/?user_id=${userId}`);
+      await http.delete(`/bookmarks/delete/${postId}/?user_id=${userId}`);
     } catch (err: unknown | AxiosError) {
       if (err instanceof AxiosError && err.response) {
         console.log(err.response);

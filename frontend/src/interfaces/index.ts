@@ -27,6 +27,17 @@ export interface IBookmark {
   id: number;
 }
 
+export interface IFullBookmark extends IBookmark {
+  post: { id: number; title: string };
+}
+
+export interface IRetrieveBookmarkResponse {
+  has_next: true;
+  message: string;
+  page: number;
+  bookmarks: IFullBookmark[];
+}
+
 export interface IPost {
   id: number;
   avatar_url: string | null;

@@ -133,7 +133,6 @@ const Post = ({
                 postId={post.id}
                 userId={user.id}
                 userBookmarked={post.user_bookmarked}
-                bookmarkId={post?.bookmark_posts[0]?.id}
                 updateBookmark={updateBookmark}
               />
               <Box cursor="pointer" display="flex" alignItems="center" mx="1rem">

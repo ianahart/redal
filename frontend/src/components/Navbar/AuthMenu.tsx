@@ -8,7 +8,7 @@ import {
   MouseEvent as ReactMouseEvent,
 } from 'react';
 import { FiSettings } from 'react-icons/fi';
-import { BsList, BsChevronLeft } from 'react-icons/bs';
+import { BsList, BsChevronLeft, BsBookmark } from 'react-icons/bs';
 import { TbLogout } from 'react-icons/tb';
 import {
   AiOutlineFileAdd,
@@ -195,6 +195,12 @@ const AuthMenu = () => {
                 url="/redal/create-post"
                 label="Create Post"
                 icon={AiOutlineFileAdd}
+              />
+              <AuthMenuLink
+                handleSetCurrentPage={handleSetCurrentPage}
+                url="/redal/bookmarks"
+                label="Bookmarks"
+                icon={BsBookmark}
               />
 
               <Box

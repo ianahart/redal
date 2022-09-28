@@ -26,6 +26,7 @@ import CreatePost from './pages/CreatePost';
 import CreateCommunity from './pages/CreateCommunity';
 import Community from './pages/Community';
 import FullPost from './pages/FullPost';
+import Bookmarks from './pages/Bookmarks';
 
 function App() {
   const { setUser, user } = useContext(UserContext) as IUserContext;
@@ -94,6 +95,14 @@ function App() {
                 element={
                   <RequireAuth>
                     <FullPost />
+                  </RequireAuth>
+                }
+              />
+              <Route
+                path="/redal/bookmarks"
+                element={
+                  <RequireAuth>
+                    <Bookmarks />
                   </RequireAuth>
                 }
               />

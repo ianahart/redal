@@ -5,7 +5,7 @@ from rest_framework.response import Response
 from rest_framework.permissions import AllowAny, IsAuthenticated
 from account.permissions import AccountPermission
 from bookmark.models import Bookmark
-from bookmark.serializers import BookmarkCreateSerialzier
+from bookmark.serializers import BookmarkCreateSerialzier, BookmarkSerializer
 
 
 class DetailsAPIView(APIView):
@@ -52,6 +52,32 @@ class DeleteBookmarkAPIView(APIView):
 
 class ListCreateAPIView(APIView):
     permission_classes = [IsAuthenticated, ]
+
+
+    def get(self, request):
+        try:
+            if 'page' not in request.query_params:
+                raise NotFound('Missing a query paramter page.')
+
+            result = Bookmark.objects.retrieve_bookmarks(
+                request.query_params['page'],
+                request.user.id
+            )
+            if result:
+                serializer = BookmarkSerializer(result['bookmarks'], many=True)
+                return Response({
+                                    'message': 'success',
+                                    'has_next': result['has_next'],
+                                    'page': result['page'],
+                                    'bookmarks': serializer.data
+                                }, status=status.HTTP_200_OK)
+
+
+        except NotFound:
+            return Response({
+                                'error': 'You currently do not have any bookmarks.'
+                            }, status=status.HTTP_404_NOT_FOUND)
+
 
     def post(self, request):
         try:

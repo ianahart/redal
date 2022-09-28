@@ -25,10 +25,9 @@ const FullPost = () => {
       if (!postId) return;
       const response = await http.get(`/posts/${postId}`);
       setPost(response.data.post);
-      console.log(response);
     } catch (err: unknown) {
       if (err instanceof AxiosError && err.response) {
-        console.log(err.response);
+        return;
       }
     }
   };
@@ -205,7 +204,6 @@ const FullPost = () => {
                 postId={post.id}
                 userId={user.id}
                 userBookmarked={post.user_bookmarked}
-                bookmarkId={post?.bookmark_posts[0]?.id}
                 updateBookmark={updateBookmark}
               />
               <Box cursor="pointer" display="flex" alignItems="center" mx="1rem">
