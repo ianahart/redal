@@ -1,4 +1,4 @@
-import { Box, Image, Text } from '@chakra-ui/react';
+import { Box, Image, Text, Heading } from '@chakra-ui/react';
 import { useParams } from 'react-router-dom';
 import { AxiosError } from 'axios';
 import { ImArrowUp, ImArrowDown } from 'react-icons/im';
@@ -12,6 +12,7 @@ import { useEffectOnce } from '../hooks/UseEffectOnce';
 import { MouseEvent } from 'react';
 import { postState } from '../helpers/data';
 import { UserContext } from '../context/user';
+import Bookmark from '../components/Community/Bookmark';
 
 const FullPost = () => {
   const { user } = useContext(UserContext) as IUserContext;
@@ -43,6 +44,7 @@ const FullPost = () => {
     postId: number,
     action: string
   ) => {
+    e.stopPropagation();
     if (post === null) return;
 
     if (post.user_upvoted === 'downvoted') {
@@ -73,6 +75,7 @@ const FullPost = () => {
     postId: number,
     action: string
   ) => {
+    e.stopPropagation();
     if (post === null) return;
     if (post.user_upvoted === 'upvoted') {
       return post;
@@ -96,6 +99,14 @@ const FullPost = () => {
       post: postId,
       action: 'downvoted',
     });
+  };
+
+  const updateBookmark = (action: string) => {
+    const bookmarked = action === 'add' ? true : false;
+    setPost((prevState) => ({
+      ...prevState,
+      user_bookmarked: bookmarked,
+    }));
   };
 
   return (
@@ -171,6 +182,11 @@ const FullPost = () => {
                 </Box>
               </Box>
             )}
+            <Box>
+              <Heading fontSize="1.6rem" color="text.primary">
+                {post.title}
+              </Heading>
+            </Box>
 
             <Box m="5rem auto 3rem auto">
               {post !== null && (
@@ -185,12 +201,13 @@ const FullPost = () => {
                   {post.comment_count} comments
                 </Text>
               </Box>
-              <Box cursor="pointer" alignItems="center" mx="1rem" display="flex">
-                <BsBookmark color="#8a8f9d" fontSize="1rem" />
-                <Text color="text.primary" ml="0.5rem" role="button" cursor="pointer">
-                  Save
-                </Text>
-              </Box>
+              <Bookmark
+                postId={post.id}
+                userId={user.id}
+                userBookmarked={post.user_bookmarked}
+                bookmarkId={post?.bookmark_posts[0]?.id}
+                updateBookmark={updateBookmark}
+              />
               <Box cursor="pointer" display="flex" alignItems="center" mx="1rem">
                 <BsThreeDots color="#8a8f9d" fontSize="1rem" />
               </Box>

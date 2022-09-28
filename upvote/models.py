@@ -2,9 +2,7 @@ from django.db import models
 from django.utils import timezone
 from typing import Any, Dict
 from django.db import  DatabaseError, models
-import random
 import logging
-import base64
 logger = logging.getLogger('django')
 
 class UpVoteManager(models.Manager):

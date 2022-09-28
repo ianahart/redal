@@ -4,6 +4,7 @@ from django.core.paginator import Paginator
 from django.utils import timezone
 from typing import Any, Dict
 from django.db import  DatabaseError, models
+from bookmark.models import Bookmark
 from services.file_upload import FileUpload
 import random
 import logging
@@ -100,8 +101,13 @@ class PostManager(models.Manager):
                 object.comment_count = object.comment_post.count()
                 upvoted = object.upvote_post.filter(action='upvoted').count()
                 downvoted = object.upvote_post.filter(action='downvoted').count()
+
                 object.upvote_count = upvoted - downvoted
                 object.user_upvoted = self.__check_user_upvoted(object.id, user_id)
+
+                bookmarks = list(object.bookmark_posts.all().filter(
+                user_id=user_id).values_list('post_id', flat=True))
+                object.user_bookmarked = True if object.id in bookmarks else False
 
 
     def __get_new(self, sort: str, page: int, community_id, user_id: int):

@@ -34,6 +34,17 @@ const Posts = ({ community }: IPostsProps) => {
   const [page, setPage] = useState(1);
   const [hasNext, setHasNext] = useState(false);
 
+  const handleUpdateBookmark = (action: string, postId: number) => {
+    const bookmarked = action === 'add' ? true : false;
+    const updated = posts.map((post) => {
+      if (post.id === postId) {
+        post.user_bookmarked = bookmarked;
+      }
+      return post;
+    });
+    setPosts(updated);
+  };
+
   const resetPosts = () => {
     setPosts([]);
     setError('');
@@ -244,6 +255,7 @@ const Posts = ({ community }: IPostsProps) => {
                   upVotePost={upVotePost}
                   downVotePost={downVotePost}
                   postStyle={postStyle}
+                  handleUpdateBookmark={handleUpdateBookmark}
                 />
               );
             })}

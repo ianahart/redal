@@ -23,6 +23,10 @@ export interface ICreateCommunityForm {
   type: { name: string; value: string; error: string };
 }
 
+export interface IBookmark {
+  id: number;
+}
+
 export interface IPost {
   id: number;
   avatar_url: string | null;
@@ -33,6 +37,8 @@ export interface IPost {
   name: string;
   upvote_count: number;
   user_upvoted: string | null;
+  user_bookmarked: boolean;
+  bookmark_posts: IBookmark[];
 }
 
 export interface IFullPost extends IPost {

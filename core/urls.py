@@ -12,6 +12,7 @@ urlpatterns = [
     path('api/v1/', include(('member.urls', 'member'))),
     path('api/v1/', include(('upvote.urls', 'upvote'))),
     path('api/v1/', include(('comment.urls', 'comment'))),
+    path('api/v1/', include(('bookmark.urls', 'bookmark'))),
 
 
 

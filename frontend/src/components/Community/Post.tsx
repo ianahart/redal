@@ -1,19 +1,29 @@
 import { Image, Box, Text, Heading } from '@chakra-ui/react';
-import { IPost } from '../../interfaces';
+import { IPost, IUserContext } from '../../interfaces';
 import { ImArrowUp, ImArrowDown } from 'react-icons/im';
 import { BiComment } from 'react-icons/bi';
 import { BsBookmark, BsThreeDots } from 'react-icons/bs';
-import { MouseEvent } from 'react';
+import { MouseEvent, useContext } from 'react';
 import { Link as RouterLink } from 'react-router-dom';
+import { UserContext } from '../../context/user';
+import Bookmark from './Bookmark';
 
 interface IPostProps {
   postStyle: string;
   post: IPost;
   upVotePost: (postId: number, action: string) => Promise<void>;
   downVotePost: (postId: number, action: string) => Promise<void>;
+  handleUpdateBookmark: (action: string, postId: number) => void;
 }
 
-const Post = ({ postStyle, post, upVotePost, downVotePost }: IPostProps) => {
+const Post = ({
+  postStyle,
+  post,
+  upVotePost,
+  downVotePost,
+  handleUpdateBookmark,
+}: IPostProps) => {
+  const { user } = useContext(UserContext) as IUserContext;
   const handleUpVotePost = async (
     e: MouseEvent<HTMLDivElement>,
     postId: number,
@@ -30,6 +40,10 @@ const Post = ({ postStyle, post, upVotePost, downVotePost }: IPostProps) => {
   ) => {
     e.stopPropagation();
     await downVotePost(postId, action);
+  };
+
+  const updateBookmark = (action: string) => {
+    handleUpdateBookmark(action, post.id);
   };
 
   return (
@@ -115,12 +129,13 @@ const Post = ({ postStyle, post, upVotePost, downVotePost }: IPostProps) => {
                   {post.comment_count} comments
                 </Text>
               </Box>
-              <Box cursor="pointer" alignItems="center" mx="1rem" display="flex">
-                <BsBookmark color="#8a8f9d" fontSize="1rem" />
-                <Text color="text.primary" ml="0.5rem" role="button" cursor="pointer">
-                  Save
-                </Text>
-              </Box>
+              <Bookmark
+                postId={post.id}
+                userId={user.id}
+                userBookmarked={post.user_bookmarked}
+                bookmarkId={post?.bookmark_posts[0]?.id}
+                updateBookmark={updateBookmark}
+              />
               <Box cursor="pointer" display="flex" alignItems="center" mx="1rem">
                 <BsThreeDots color="#8a8f9d" fontSize="1rem" />
               </Box>
