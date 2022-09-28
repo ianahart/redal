@@ -54,6 +54,7 @@ export interface IPost {
 
 export interface IFullPost extends IPost {
   post: Value;
+  user_id: number;
 }
 
 export interface IPostsResponse {

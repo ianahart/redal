@@ -13,6 +13,7 @@ import { MouseEvent } from 'react';
 import { postState } from '../helpers/data';
 import { UserContext } from '../context/user';
 import Bookmark from '../components/Community/Bookmark';
+import Comments from '../components/Community/Comments';
 
 const FullPost = () => {
   const { user } = useContext(UserContext) as IUserContext;
@@ -209,6 +210,9 @@ const FullPost = () => {
               <Box cursor="pointer" display="flex" alignItems="center" mx="1rem">
                 <BsThreeDots color="#8a8f9d" fontSize="1rem" />
               </Box>
+            </Box>
+            <Box my="2rem">
+              <Comments postId={post.id} authorId={post.user_id} />
             </Box>
           </Box>
         </Box>

@@ -15,7 +15,6 @@ const Bookmarks = () => {
   const fetchBookmarks = async (endpoint: string) => {
     try {
       const response = await http.get<IRetrieveBookmarkResponse>(endpoint);
-      console.log(response);
       setBookmarks((prevState) => [...prevState, ...response.data.bookmarks]);
       setHasNext(response.data.has_next);
       setPage(response.data.page);

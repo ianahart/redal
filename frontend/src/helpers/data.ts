@@ -71,4 +71,5 @@ export const postState = {
   user_upvoted: null,
   bookmark_posts: [],
   user_bookmarked: false,
+  user_id: 0,
 };
