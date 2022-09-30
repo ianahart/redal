@@ -22,7 +22,7 @@ class PostSerializer(serializers.ModelSerializer):
         depth=1
         fields = ('id', 'avatar_url', 'initials', 'upvote_count',
                   'title', 'name', 'display_date', 'comment_count',
-                  'user_upvoted', 'post', 'user_bookmarked',
+                  'user_upvoted', 'post', 'user_bookmarked','user_id',
                   )
 
 

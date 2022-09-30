@@ -12,6 +12,7 @@ import logo from '../../images/logo.png';
 import { AiOutlineHome, AiOutlineUser } from 'react-icons/ai';
 import AuthMenu from './AuthMenu';
 import { CommunityContext } from '../../context/community';
+import Notifications from './Notifications';
 
 const AuthNavbar = () => {
   const { resetCommunities } = useContext(CommunityContext) as ICommunityContext;
@@ -85,6 +86,7 @@ const AuthNavbar = () => {
           alignItems="center"
         >
           <Searchbar />
+          <Notifications />
           <Box
             onClick={() => setMenuOpen(true)}
             height="50px"

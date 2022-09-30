@@ -3,68 +3,65 @@ from rest_framework.views import APIView
 from rest_framework import status
 from rest_framework.response import Response
 from rest_framework.permissions import AllowAny, IsAuthenticated
-from comment.models import Comment
-from comment.serializers import CommentMinSerializer
 from account.permissions import AccountPermission
+from notification.models import Notification
+from notification.serializers import NotificationSerializer
 
 
 
 
- 
+
+
+
 class DetailsAPIView(APIView):
     permission_classes = [IsAuthenticated, AccountPermission, ]
-
+    
     def delete(self, request, pk: int):
         try:
-            comment = Comment.objects.get(pk=pk)
-            self.check_object_permissions(request, comment.user)
-            comment.delete()
-
+            notification = Notification.objects.get(pk=pk)
+            self.check_object_permissions(request, notification.user)
+            notification.delete()
 
             return Response({
-                                'message': 'success'
+                                'message':'success'
                             }, status=status.HTTP_200_OK)
-
         except PermissionDenied:
             return Response({
-                                'error': 'You do not have authorization for this action.'
+                                'error': 'Do not have necessary authorization.'
                             }, status=status.HTTP_403_FORBIDDEN)
+
+
 
 class ListCreateAPIView(APIView):
     permission_classes = [IsAuthenticated, ]
 
     def get(self, request):
         try:
-            page, sort, post_id = request.query_params.values()
-            result = Comment.objects.retrieve_comments(page, sort, post_id)
+
+            result = Notification.objects.fetch_notifications(
+                request.query_params['page'],
+                request.user.id)
+
+            notifications_count = Notification.objects.all().filter(
+                user_id=request.user.id).count()
 
             if result:
-                serializer = CommentMinSerializer(result['comments'], many=True)
+                serializer = NotificationSerializer(result['notifications'], many=True)
                 return Response({
                                     'message': 'success',
                                     'has_next': result['has_next'],
                                     'page': result['page'],
-                                    'comments': serializer.data
+                                    'notifications': serializer.data,
+                                    'notifications_count': notifications_count
                                 }, status=status.HTTP_200_OK)
 
 
-        except NotFound:
+
             return Response({
-                                'error': 'No Comments found for this post.'
-                            }, status=status.HTTP_404_NOT_FOUND)
-
-
-
-    def post(self, request):
-        try:
-            return Response({
-                                'message': 'success',
+                                'message': 'success'
                             }, status=status.HTTP_200_OK)
 
-        except ParseError:
+        except NotFound: 
             return Response({
-                                'error': 'Could not create comment'
-                            }, status=status.HTTP_400_BAD_REQUEST)
-
-
-
+                                'error': 'Unable to retrieve notifications.'
+                            }, status=status.HTTP_404_NOT_FOUND)

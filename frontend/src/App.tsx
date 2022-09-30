@@ -1,4 +1,4 @@
-import React, { useCallback, useContext } from 'react';
+import React, { useCallback, useContext, useState } from 'react';
 import './App.css';
 import { Box, ChakraProvider } from '@chakra-ui/react';
 import { AxiosError } from 'axios';
@@ -9,7 +9,7 @@ import Footer from './components/Footer';
 import Home from './pages/Home';
 import CreateAccount from './pages/CreateAccount';
 import Login from './pages/Login';
-import { http, retreiveTokens } from './helpers/utils';
+import { http, retreiveTokens, parseJWT } from './helpers/utils';
 import { IUserContext } from './interfaces';
 import { UserContext } from './context/user';
 import { useEffectOnce } from './hooks/UseEffectOnce';
@@ -27,9 +27,31 @@ import CreateCommunity from './pages/CreateCommunity';
 import Community from './pages/Community';
 import FullPost from './pages/FullPost';
 import Bookmarks from './pages/Bookmarks';
+import { useEffect } from 'react';
+import useWebSocket, { ReadyState } from 'react-use-websocket';
 
 function App() {
   const { setUser, user } = useContext(UserContext) as IUserContext;
+  const [socketUrl, setSocketUrl] = useState('');
+
+  useEffect(() => {
+    const tokens = retreiveTokens();
+    if (user.id === 0) return;
+    if (!tokens) return;
+    const userId = parseJWT(tokens);
+
+    setSocketUrl(
+      `ws://127.0.0.1:8000/ws/notification/${userId}/?token=${
+        retreiveTokens()?.access_token
+      }`
+    );
+  }, [user.id]);
+
+  const {} = useWebSocket(socketUrl, {
+    share: true,
+    onOpen: () => console.log('opened'),
+    shouldReconnect: (closeEvent) => true,
+  });
 
   const storeUser = useCallback(async () => {
     try {

@@ -171,3 +171,22 @@ export interface ICommunityContext {
   setMenuCurrentPage: (menuCurrentPage: number) => void;
   setMenuHasNextPage: (menuHasNextPage: boolean) => void;
 }
+
+export interface IComment {
+  id: number;
+  text: string;
+  user: IUser;
+  readable_date: string;
+}
+
+export interface INotification {
+  id: number;
+  text: string;
+}
+
+export interface ICommentsResponse {
+  has_next: boolean;
+  message?: string;
+  page: number;
+  comments: IComment[];
+}
