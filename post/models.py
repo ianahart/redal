@@ -140,6 +140,24 @@ class PostManager(models.Manager):
     def __get_hot(self, sort: str, page: int, community_id, user_id: int):
         try:
             print('get hot')
+            objects = Post.objects.all().filter(
+                community_id=community_id).annotate(
+                ncomment=Count('comment_post')).order_by('-ncomment')
+
+            self.__add_foreign_fields(objects, user_id)
+
+            paginator = Paginator(objects, 3)
+            next_page = int(page) + 1
+            cur_page = paginator.page(next_page)
+
+            return {
+                'posts': cur_page.object_list,
+                'has_next': cur_page.has_next(),
+                'page': next_page,
+            }
+
+
+
         except DatabaseError:
             logger.error('Unable to retrieve hot posts.')
 
