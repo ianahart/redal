@@ -44,6 +44,7 @@ class NotificationManager(models.Manager):
 
                 comment=comment,
                 user=comment.author,
+                avatar_url=comment.user.avatar_url,
                 text=text
             )
 
@@ -60,6 +61,7 @@ class Notification(models.Model):
     created_at = models.DateTimeField(default=timezone.now)
     updated_at = models.DateTimeField(default=timezone.now)
     text = models.CharField(max_length=100)
+    avatar_url = models.URLField(blank=True, null=True)
     comment = models.ForeignKey(
     'comment.Comment',
     on_delete=models.CASCADE,

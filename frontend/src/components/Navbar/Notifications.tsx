@@ -1,5 +1,5 @@
 import { AiFillBell, AiOutlineClose } from 'react-icons/ai';
-import { Button, Box, Text } from '@chakra-ui/react';
+import { Button, Box, Text, Image } from '@chakra-ui/react';
 import { AxiosError } from 'axios';
 import { useEffect, useState, useRef, useCallback, useContext } from 'react';
 import useWebSocket from 'react-use-websocket';
@@ -15,7 +15,7 @@ const Notifications = () => {
   const [notifications, setNotifications] = useState<INotification[]>([]);
 
   const [page, setPage] = useState(1);
-  const [hasNext, setHasNext] = useState();
+  const [hasNext, setHasNext] = useState(false);
   const [notificationsCount, setNotificationsCount] = useState(0);
   const triggerRef = useRef<HTMLDivElement>(null);
   const menuRef = useRef<HTMLDivElement>(null);
@@ -143,6 +143,16 @@ const Notifications = () => {
                     key={notification.id}
                   >
                     <Box justifyContent="center" display="flex">
+                      {notification.avatar_url !== null && (
+                        <Image
+                          mr="0.5rem"
+                          height="30px"
+                          width="30px"
+                          borderRadius="50%"
+                          src={notification.avatar_url}
+                          alt="profile picture"
+                        />
+                      )}
                       <Text width="170px" color="text.primary" fontSize="0.85rem">
                         {notification.text}
                       </Text>

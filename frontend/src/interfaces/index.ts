@@ -182,6 +182,7 @@ export interface IComment {
 export interface INotification {
   id: number;
   text: string;
+  avatar_url: string;
 }
 
 export interface ICommentsResponse {

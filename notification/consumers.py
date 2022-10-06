@@ -63,7 +63,6 @@ class Consumer(AsyncWebsocketConsumer):
         notification = await database_sync_to_async(self.save_notification)(comment_obj)
         notifications = await database_sync_to_async(self.notifications)(comment_obj.author)
 
-        print(message)
         self.sender_group_name = 'chat_' + str(self.room_name)
         self.reciever_group_name = 'chat_' + str(comment_obj.author.id)
 

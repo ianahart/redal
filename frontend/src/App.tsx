@@ -22,6 +22,7 @@ import Settings from './pages/Settings';
 import Account from './components/Settings/Account';
 import ProfileForm from './components/Settings/ProfileForm';
 import Notifications from './components/Settings/Notifications';
+import NotificationsPage from './pages/NotificationsPage';
 import CreatePost from './pages/CreatePost';
 import CreateCommunity from './pages/CreateCommunity';
 import Community from './pages/Community';
@@ -129,6 +130,14 @@ function App() {
                 }
               />
 
+              <Route
+                path="/redal/notifications"
+                element={
+                  <RequireAuth>
+                    <NotificationsPage />
+                  </RequireAuth>
+                }
+              />
               <Route
                 path="/redal/create-post"
                 element={

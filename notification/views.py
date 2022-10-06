@@ -10,9 +10,6 @@ from notification.serializers import NotificationSerializer
 
 
 
-
-
-
 class DetailsAPIView(APIView):
     permission_classes = [IsAuthenticated, AccountPermission, ]
     
