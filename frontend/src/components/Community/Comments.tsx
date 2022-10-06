@@ -101,6 +101,28 @@ const Comments = ({ postId, authorId }: ICommentProps) => {
     }
   };
 
+  const handleUnlike = (commentId: number) => {
+    const updated = comments.map((comment) => {
+      if (comment.id === commentId) {
+        comment.like_id = null;
+        comment.like_count = comment.like_count - 1;
+      }
+      return comment;
+    });
+    setComments(updated);
+  };
+
+  const handleLike = (likeId: number, commentId: number) => {
+    const updated = comments.map((comment) => {
+      if (comment.id === commentId) {
+        comment.like_id = likeId;
+        comment.like_count = comment.like_count + 1;
+      }
+      return comment;
+    });
+    setComments(updated);
+  };
+
   return (
     <Box display="flex" mx="2rem" justifyContent="flex-start">
       <Box display="flex" width="100%" flexDir="column">
@@ -159,6 +181,8 @@ const Comments = ({ postId, authorId }: ICommentProps) => {
               <Comment
                 key={comment.id}
                 fetchComments={fetchComments}
+                handleUnlike={handleUnlike}
+                handleLike={handleLike}
                 postId={postId}
                 comment={comment}
                 user={user}

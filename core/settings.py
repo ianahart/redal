@@ -57,7 +57,8 @@ INSTALLED_APPS = [
     'upvote',
     'comment',
     'bookmark',
-    'notification'
+    'notification',
+    'like'
 ]
 
 

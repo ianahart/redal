@@ -3,6 +3,7 @@ from rest_framework import serializers
 from account.serializers import UserSerializer
 
 from comment.models import Comment
+from like.serializers import LikeSerializer
 
 class CommentCreateSerializer(serializers.ModelSerializer):
     class Meta:
@@ -15,9 +16,11 @@ class CommentCreateSerializer(serializers.ModelSerializer):
 class CommentMinSerializer(serializers.ModelSerializer):
     user = UserSerializer()
     readable_date = serializers.CharField()
+    like_id = serializers.IntegerField()
+    like_count = serializers.IntegerField()
     class Meta:
         model = Comment
-        fields = ('user', 'text', 'id', 'readable_date', )
+        fields = ('user', 'text', 'id', 'readable_date', 'like_id', 'like_count', )
 
 
 

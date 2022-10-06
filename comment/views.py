@@ -36,7 +36,7 @@ class ListCreateAPIView(APIView):
     def get(self, request):
         try:
             page, sort, post_id = request.query_params.values()
-            result = Comment.objects.retrieve_comments(page, sort, post_id)
+            result = Comment.objects.retrieve_comments(page, sort, post_id, request.user.id)
 
             if result:
                 serializer = CommentMinSerializer(result['comments'], many=True)

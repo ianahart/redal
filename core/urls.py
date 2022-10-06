@@ -14,6 +14,7 @@ urlpatterns = [
     path('api/v1/', include(('comment.urls', 'comment'))),
     path('api/v1/', include(('bookmark.urls', 'bookmark'))),
     path('api/v1/', include(('notification.urls', 'notification'))),
+    path('api/v1/', include(('like.urls', 'like'))),
 
 
 

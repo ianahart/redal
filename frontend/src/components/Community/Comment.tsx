@@ -10,13 +10,58 @@ interface ICommentProps {
   user: IUser;
   postId: number;
   fetchComments: (endpoint: string, sort: string) => Promise<void>;
+  handleUnlike: (commentId: number) => void;
+  handleLike: (likeId: number, commentId: number) => void;
 }
 
-const Comment = ({ comment, user, postId, fetchComments }: ICommentProps) => {
+const Comment = ({
+  comment,
+  user,
+  postId,
+  fetchComments,
+  handleUnlike,
+  handleLike,
+}: ICommentProps) => {
   const deleteComment = async () => {
     try {
       await http.delete(`/comments/${comment.id}/`);
       await fetchComments('/comments/?page=0&sort=new&postId=' + postId, 'new');
+    } catch (err: unknown | AxiosError) {
+      if (err instanceof AxiosError && err.response) {
+        return;
+      }
+    }
+  };
+
+  const addLike = async (comment: number) => {
+    try {
+      const response = await http.post('/likes/', { comment });
+      handleLike(response.data.like.id, response.data.like.comment);
+    } catch (err: unknown | AxiosError) {
+      if (err instanceof AxiosError && err.response) {
+        return;
+      }
+    }
+  };
+
+  const unlike = async (commentId: number, likeId: number) => {
+    try {
+      await http.delete(`/likes/${likeId}`);
+      handleUnlike(commentId);
+    } catch (err: unknown | AxiosError) {
+      if (err instanceof AxiosError && err.response) {
+        return;
+      }
+    }
+  };
+
+  const handleLikeOperation = async (comment: IComment) => {
+    try {
+      if (!comment.like_id) {
+        await addLike(comment.id);
+      } else {
+        unlike(comment.id, comment.like_id);
+      }
     } catch (err: unknown | AxiosError) {
       if (err instanceof AxiosError && err.response) {
         return;
@@ -76,10 +121,28 @@ const Comment = ({ comment, user, postId, fetchComments }: ICommentProps) => {
       </Box>
       <Box display="flex" justifyContent="space-between" my="1rem">
         <Box display="flex">
-          <Box mx="1.5rem" display="flex" alignItems="center">
-            <AiOutlineLike color="#8a8f9d" fontSize="1.5rem" />
-            <Text color="text.primary" fontSize="0.85rem">
-              Like
+          <Box
+            onClick={() => handleLikeOperation(comment)}
+            cursor="pointer"
+            mx="1.5rem"
+            display="flex"
+            alignItems="center"
+          >
+            <Text color="blue.quatenary">
+              {comment.like_count > 0 ? comment.like_count : ''}
+            </Text>
+            <Box transform={comment.like_id !== null ? 'rotate(-10deg)' : ''}>
+              <AiOutlineLike
+                color={comment.like_id !== null ? '#0080FF' : '#8a8f9d'}
+                fontSize="1.5rem"
+              />
+            </Box>
+            <Text
+              fontWeight={comment.like_id !== null ? 'bold' : 'normal'}
+              color={comment.like_id !== null ? '#0080FF' : '#8a8f9d'}
+              fontSize="0.85rem"
+            >
+              {comment.like_id !== null ? 'Unlike' : 'Like'}
             </Text>
           </Box>
           <Box mx="1.5rem" display="flex" alignItems="center">

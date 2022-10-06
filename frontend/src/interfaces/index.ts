@@ -177,6 +177,8 @@ export interface IComment {
   text: string;
   user: IUser;
   readable_date: string;
+  like_id: number | null;
+  like_count: number;
 }
 
 export interface INotification {
