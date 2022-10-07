@@ -26,7 +26,6 @@ interface IPostsProps {
 
 const Posts = ({ community }: IPostsProps) => {
   const { user } = useContext(UserContext) as IUserContext;
-  // hot(comments), new (date), top (upvotes)
   const [filter, setFilter] = useState('new');
   const [posts, setPosts] = useState<IPost[]>([]);
   const [postStyle, setPostStyle] = useState('card');

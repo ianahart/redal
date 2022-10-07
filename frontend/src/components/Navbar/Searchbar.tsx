@@ -111,6 +111,7 @@ const Searchbar = () => {
         <Box
           className="overflow-scroll"
           ref={menuRef}
+          zIndex="5"
           position="absolute"
           boxShadow="lg"
           top="50px"

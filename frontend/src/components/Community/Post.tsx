@@ -80,6 +80,16 @@ const Post = ({
           </Box>
         </Box>
         <Box flexGrow="2" width="90%">
+          <Box display="flex" color="text.primary" my="0.5rem">
+            <Text mx="0.5rem">r/{post.community_name}</Text>
+            <Image
+              width="25px"
+              height="25px"
+              borderRadius="50%"
+              src={post.image_url}
+              alt="community image"
+            />
+          </Box>
           <Box color="text.primary" display="flex">
             <Text mx="0.5rem">Posted by {post.name}</Text>
             <Text mx="0.5rem">{post.display_date}</Text>

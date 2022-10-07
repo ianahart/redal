@@ -9,6 +9,31 @@ from services.file_upload import FileUpload
 from account.permissions import AccountPermission
 from post.serializers import FileSerializer, PostCreateSerializer, PostSerializer, PostsSerializer
 
+class AllPostsAPIView(APIView):
+    def get(self, request):
+        try:
+
+            result = Post.objects.get_all(request.query_params['page'], request.user.id)
+            if result:
+                serializer = PostsSerializer(result['posts'], many=True)
+                return Response({
+                                    'message': 'success',
+                                    'has_next': result['has_next'],
+                                    'page': result['page'],
+                                    'posts': serializer.data
+                                }, status=status.HTTP_200_OK)
+
+
+
+
+            return Response({
+                                'message': 'success'
+                            }, status=status.HTTP_200_OK)
+
+        except NotFound:
+            return Response({
+                                'error': 'No posts have been found. Follow a community so posts will show up on your home feed.'
+                            }, status=status.HTTP_404_NOT_FOUND)
 
 class DetailsAPIView(APIView):
     permission_classes = [IsAuthenticated, AccountPermission, ]

@@ -6,6 +6,7 @@ from typing import Any, Dict
 from django.db import  DatabaseError, models
 from bookmark.models import Bookmark
 from services.file_upload import FileUpload
+from member.models import Member
 import random
 import logging
 import time
@@ -102,6 +103,9 @@ class PostManager(models.Manager):
                 upvoted = object.upvote_post.filter(action='upvoted').count()
                 downvoted = object.upvote_post.filter(action='downvoted').count()
 
+                object.image_url = object.community.image_url
+                object.community_name = object.community.name
+
                 object.upvote_count = upvoted - downvoted
                 object.user_upvoted = self.__check_user_upvoted(object.id, user_id)
 
@@ -186,6 +190,43 @@ class PostManager(models.Manager):
 
         except DatabaseError:
             logger.error('Unable to retrieve top posts.')
+
+
+
+    def get_all(self, page: int, user_id: int):
+        try:
+
+            member_of = Member.objects.all().order_by('-id').filter(
+                user_id=user_id).values_list('community_id', flat=True)
+
+            print(member_of)
+
+            objects = Post.objects.all().order_by('-id').filter(community_id__in=list(member_of))
+            print(objects.count())
+
+            self.__add_foreign_fields(objects, user_id)
+
+            paginator = Paginator(objects, 3)
+            next_page = int(page) + 1
+            cur_page = paginator.page(next_page)
+
+            return {
+                'posts': cur_page.object_list,
+                'has_next': cur_page.has_next(),
+                'page': next_page,
+            }
+
+
+        except DatabaseError:
+            logger.error('Unable to retrieve new posts.')
+            return {
+                'posts': [],
+                'has_next': False,
+                'page': 0,
+            }
+
+
+
 
 class Post(models.Model):
 

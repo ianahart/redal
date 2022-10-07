@@ -72,4 +72,6 @@ export const postState = {
   bookmark_posts: [],
   user_bookmarked: false,
   user_id: 0,
+  community_name: '',
+  image_url: '',
 };

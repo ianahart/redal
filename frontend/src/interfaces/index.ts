@@ -50,6 +50,8 @@ export interface IPost {
   user_upvoted: string | null;
   user_bookmarked: boolean;
   bookmark_posts: IBookmark[];
+  image_url: string;
+  community_name: string;
 }
 
 export interface IFullPost extends IPost {
