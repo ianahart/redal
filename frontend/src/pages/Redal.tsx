@@ -51,7 +51,6 @@ const Redal = () => {
     try {
       resetPosts();
       const response = await http.get(endpoint);
-      console.log(response);
       if (response.data.posts.length === 0) {
         setError('All posts are loaded.');
       }
@@ -141,6 +140,18 @@ const Redal = () => {
     }
   };
 
+  const deletePost = async (postId: number) => {
+    try {
+      const updated = posts.filter((post) => post.id !== postId);
+      setPosts(updated);
+      const response = await http.delete(`/posts/${postId}/`);
+    } catch (err: unknown | AxiosError) {
+      if (err instanceof AxiosError && err.response) {
+        return;
+      }
+    }
+  };
+
   return (
     <Box bg="blue.primary" minH="100vh" my="2rem">
       <Box m="5rem auto 2rem auto" width={['90%', '90%', '650px']}>
@@ -204,6 +215,7 @@ const Redal = () => {
                     downVotePost={downVotePost}
                     postStyle={postStyle}
                     handleUpdateBookmark={handleUpdateBookmark}
+                    deletePost={deletePost}
                   />
                 );
               })}

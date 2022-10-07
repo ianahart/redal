@@ -52,6 +52,7 @@ export interface IPost {
   bookmark_posts: IBookmark[];
   image_url: string;
   community_name: string;
+  user_id: number;
 }
 
 export interface IFullPost extends IPost {

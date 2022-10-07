@@ -149,6 +149,19 @@ const Posts = ({ community }: IPostsProps) => {
     }
   };
 
+  const deletePost = async (postId: number) => {
+    try {
+      const updated = posts.filter((post) => post.id !== postId);
+      setPosts(updated);
+
+      const response = await http.delete(`/posts/${postId}/`);
+    } catch (err: unknown | AxiosError) {
+      if (err instanceof AxiosError && err.response) {
+        return;
+      }
+    }
+  };
+
   return (
     <Box my="2rem">
       <Box
@@ -255,6 +268,7 @@ const Posts = ({ community }: IPostsProps) => {
                   downVotePost={downVotePost}
                   postStyle={postStyle}
                   handleUpdateBookmark={handleUpdateBookmark}
+                  deletePost={deletePost}
                 />
               );
             })}

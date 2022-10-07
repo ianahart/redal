@@ -3,10 +3,12 @@ import { IPost, IUserContext } from '../../interfaces';
 import { ImArrowUp, ImArrowDown } from 'react-icons/im';
 import { BiComment } from 'react-icons/bi';
 import { BsBookmark, BsThreeDots } from 'react-icons/bs';
-import { MouseEvent, useContext } from 'react';
+import { useCallback, useContext, useEffect, useRef, useState } from 'react';
 import { Link as RouterLink } from 'react-router-dom';
 import { UserContext } from '../../context/user';
 import Bookmark from './Bookmark';
+import { http } from '../../helpers/utils';
+import { AxiosError } from 'axios';
 
 interface IPostProps {
   postStyle: string;
@@ -14,6 +16,7 @@ interface IPostProps {
   upVotePost: (postId: number, action: string) => Promise<void>;
   downVotePost: (postId: number, action: string) => Promise<void>;
   handleUpdateBookmark: (action: string, postId: number) => void;
+  deletePost: (postId: number) => Promise<void>;
 }
 
 const Post = ({
@@ -22,10 +25,15 @@ const Post = ({
   upVotePost,
   downVotePost,
   handleUpdateBookmark,
+  deletePost,
 }: IPostProps) => {
   const { user } = useContext(UserContext) as IUserContext;
+  const [menuOpen, setMenuOpen] = useState(false);
+  const menuRef = useRef<HTMLDivElement>(null);
+  const triggerRef = useRef<HTMLDivElement>(null);
+
   const handleUpVotePost = async (
-    e: MouseEvent<HTMLDivElement>,
+    e: React.MouseEvent<HTMLDivElement>,
     postId: number,
     action: string
   ) => {
@@ -34,7 +42,7 @@ const Post = ({
   };
 
   const handleDownVotePost = async (
-    e: MouseEvent<HTMLDivElement>,
+    e: React.MouseEvent<HTMLDivElement>,
     postId: number,
     action: string
   ) => {
@@ -45,6 +53,25 @@ const Post = ({
   const updateBookmark = (action: string) => {
     handleUpdateBookmark(action, post.id);
   };
+
+  const clickAway = useCallback(
+    (e: MouseEvent) => {
+      console.log('click');
+      const target = e.target as Element;
+
+      if (menuRef.current !== null && triggerRef.current !== null) {
+        if (!menuRef.current.contains(target) && triggerRef.current !== target) {
+          setMenuOpen(false);
+        }
+      }
+    },
+    [setMenuOpen]
+  );
+
+  useEffect(() => {
+    window.addEventListener('click', clickAway);
+    return () => window.removeEventListener('click', clickAway);
+  }, [clickAway]);
 
   return (
     <Box
@@ -146,7 +173,32 @@ const Post = ({
                 updateBookmark={updateBookmark}
               />
               <Box cursor="pointer" display="flex" alignItems="center" mx="1rem">
-                <BsThreeDots color="#8a8f9d" fontSize="1rem" />
+                <Box
+                  ref={triggerRef}
+                  onClick={() => setMenuOpen(true)}
+                  position="relative"
+                >
+                  <BsThreeDots color="#8a8f9d" pointerEvents="none" fontSize="1rem" />
+                  {menuOpen && post.user_id === user.id && (
+                    <Box
+                      ref={menuRef}
+                      position="absolute"
+                      bg="blue.tertiary"
+                      p="0.5rem"
+                      top="-40px"
+                      left="0"
+                      borderRadius="3px"
+                    >
+                      <Text
+                        onClick={() => deletePost(post.id)}
+                        fontSize="0.85rem"
+                        color="#fff"
+                      >
+                        Delete
+                      </Text>
+                    </Box>
+                  )}
+                </Box>
               </Box>
             </Box>
           </Box>

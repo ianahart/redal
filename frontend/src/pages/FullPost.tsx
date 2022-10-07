@@ -1,15 +1,14 @@
 import { Box, Image, Text, Heading } from '@chakra-ui/react';
-import { useParams } from 'react-router-dom';
-import { AxiosError } from 'axios';
+import { useNavigate, useParams } from 'react-router-dom';
+import { Axios, AxiosError } from 'axios';
 import { ImArrowUp, ImArrowDown } from 'react-icons/im';
 import { BiComment } from 'react-icons/bi';
 import { BsBookmark, BsThreeDots } from 'react-icons/bs';
-import { useState, useContext } from 'react';
+import { useEffect, useRef, useCallback, useState, useContext } from 'react';
 import { IFullPost, IUserContext } from '../interfaces';
 import ReactQuill, { Value } from 'react-quill';
 import { http } from '../helpers/utils';
 import { useEffectOnce } from '../hooks/UseEffectOnce';
-import { MouseEvent } from 'react';
 import { postState } from '../helpers/data';
 import { UserContext } from '../context/user';
 import Bookmark from '../components/Community/Bookmark';
@@ -18,6 +17,11 @@ import Comments from '../components/Community/Comments';
 const FullPost = () => {
   const { user } = useContext(UserContext) as IUserContext;
   const params = useParams();
+  const navigate = useNavigate();
+  const [menuOpen, setMenuOpen] = useState(false);
+  const menuRef = useRef<HTMLDivElement>(null);
+  const triggerRef = useRef<HTMLDivElement>(null);
+
   const [post, setPost] = useState<IFullPost>(postState);
   const modules = { toolbar: [] };
 
@@ -40,7 +44,7 @@ const FullPost = () => {
   });
 
   const handleUpVotePost = async (
-    e: MouseEvent<HTMLDivElement>,
+    e: React.MouseEvent<HTMLDivElement>,
     postId: number,
     action: string
   ) => {
@@ -71,7 +75,7 @@ const FullPost = () => {
   };
 
   const handleDownVotePost = async (
-    e: MouseEvent<HTMLDivElement>,
+    e: React.MouseEvent<HTMLDivElement>,
     postId: number,
     action: string
   ) => {
@@ -107,6 +111,36 @@ const FullPost = () => {
       ...prevState,
       user_bookmarked: bookmarked,
     }));
+  };
+
+  const clickAway = useCallback(
+    (e: MouseEvent) => {
+      console.log('click');
+      const target = e.target as Element;
+
+      if (menuRef.current !== null && triggerRef.current !== null) {
+        if (!menuRef.current.contains(target) && triggerRef.current !== target) {
+          setMenuOpen(false);
+        }
+      }
+    },
+    [setMenuOpen]
+  );
+
+  useEffect(() => {
+    window.addEventListener('click', clickAway);
+    return () => window.removeEventListener('click', clickAway);
+  }, [clickAway]);
+
+  const deletePost = async (postId: number) => {
+    try {
+      const response = await http.delete(`/posts/${postId}/`);
+      navigate(-1);
+    } catch (err: unknown | AxiosError) {
+      if (err instanceof AxiosError && err.response) {
+        return;
+      }
+    }
   };
 
   return (
@@ -208,7 +242,32 @@ const FullPost = () => {
                 updateBookmark={updateBookmark}
               />
               <Box cursor="pointer" display="flex" alignItems="center" mx="1rem">
-                <BsThreeDots color="#8a8f9d" fontSize="1rem" />
+                <Box
+                  ref={triggerRef}
+                  onClick={() => setMenuOpen(true)}
+                  position="relative"
+                >
+                  <BsThreeDots color="#8a8f9d" pointerEvents="none" fontSize="1rem" />
+                  {menuOpen && post.user_id === user.id && (
+                    <Box
+                      ref={menuRef}
+                      position="absolute"
+                      bg="blue.tertiary"
+                      p="0.5rem"
+                      top="-40px"
+                      left="0"
+                      borderRadius="3px"
+                    >
+                      <Text
+                        onClick={() => deletePost(post.id)}
+                        fontSize="0.85rem"
+                        color="#fff"
+                      >
+                        Delete
+                      </Text>
+                    </Box>
+                  )}
+                </Box>
               </Box>
             </Box>
             <Box my="2rem">

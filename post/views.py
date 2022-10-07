@@ -1,4 +1,4 @@
-from rest_framework.exceptions import NotFound, ParseError
+from rest_framework.exceptions import NotFound, ParseError, PermissionDenied
 from rest_framework.views import APIView
 from rest_framework import status
 from rest_framework.response import Response
@@ -37,6 +37,21 @@ class AllPostsAPIView(APIView):
 
 class DetailsAPIView(APIView):
     permission_classes = [IsAuthenticated, AccountPermission, ]
+
+    def delete(self, request, pk: int):
+        try:
+            post = Post.objects.get(pk=pk)
+            self.check_object_permissions(request, post.user)
+            post.delete()
+            return Response({
+                                'message': 'success'
+                            }, status=status.HTTP_200_OK)
+
+
+        except PermissionDenied:
+            return Response({
+                                'error': 'Unable to remove post. You do not have proper authorization.'
+                            })
 
     def get(self, request, pk: int):
         try:

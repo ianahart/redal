@@ -49,7 +49,7 @@ class PostsSerializer(serializers.ModelSerializer):
         fields = ('id', 'avatar_url', 'initials', 'upvote_count',
                   'title', 'name', 'display_date', 'comment_count',
                   'user_upvoted', 'user_bookmarked',
-                  'image_url', 'community_name',
+                  'image_url', 'community_name', 'user_id',
                   )
 
 
