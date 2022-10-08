@@ -18,6 +18,8 @@ class PostSerializer(serializers.ModelSerializer):
     user_bookmarked = serializers.BooleanField()
     image_url = serializers.CharField()
     community_name = serializers.CharField()
+    community_slug = serializers.CharField()
+    community_id = serializers.IntegerField()
 
     class Meta:
         model = Post
@@ -25,7 +27,8 @@ class PostSerializer(serializers.ModelSerializer):
         fields = ('id', 'avatar_url', 'initials', 'upvote_count',
                   'title', 'name', 'display_date', 'comment_count',
                   'user_upvoted', 'post', 'user_bookmarked','user_id',
-                    'image_url', 'community_name',
+                    'image_url', 'community_name', 'community_slug',
+                     'community_id',
 
                   )
 
@@ -40,6 +43,8 @@ class PostsSerializer(serializers.ModelSerializer):
     user_bookmarked = serializers.BooleanField()
     image_url = serializers.CharField()
     community_name = serializers.CharField()
+    community_slug = serializers.CharField()
+    community_id = serializers.IntegerField()
 
 
 
@@ -49,7 +54,8 @@ class PostsSerializer(serializers.ModelSerializer):
         fields = ('id', 'avatar_url', 'initials', 'upvote_count',
                   'title', 'name', 'display_date', 'comment_count',
                   'user_upvoted', 'user_bookmarked',
-                  'image_url', 'community_name', 'user_id',
+                  'image_url', 'community_name', 'user_id','community_slug', 
+                  'community_id',
                   )
 
 

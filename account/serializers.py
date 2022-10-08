@@ -1,15 +1,17 @@
 from rest_framework import serializers
 
 from account.models import CustomUser
+from setting.serializers import SettingSerializer
 
 class UserSerializer(serializers.ModelSerializer):
     initials = serializers.CharField()
+    setting_user = SettingSerializer(read_only=True)
 
     class Meta:
         model = CustomUser
         fields = ('initials', 'first_name', 'last_name', 
                  'avatar_url', 'id', 'email', 'logged_in', 'color',
-                  'about', 'display_name'
+                  'about', 'display_name', 'setting_user',
                   )
 
 

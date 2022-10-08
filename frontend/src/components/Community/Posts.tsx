@@ -262,6 +262,7 @@ const Posts = ({ community }: IPostsProps) => {
             {posts.map((post) => {
               return (
                 <Post
+                  feed="community"
                   key={post.id}
                   post={post}
                   upVotePost={upVotePost}

@@ -209,6 +209,7 @@ const Redal = () => {
               {posts.map((post) => {
                 return (
                   <Post
+                    feed="main"
                     key={nanoid()}
                     post={post}
                     upVotePost={upVotePost}

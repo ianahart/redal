@@ -53,6 +53,8 @@ export interface IPost {
   image_url: string;
   community_name: string;
   user_id: number;
+  community_slug: string;
+  community_id: number;
 }
 
 export interface IFullPost extends IPost {
@@ -89,6 +91,14 @@ export interface IUser {
   color: string;
   about: string | null;
   display_name: string | null;
+  setting_user: ISetting;
+}
+
+export interface ISetting {
+  id: number;
+  user_id: number;
+  notifications_on: boolean;
+  messages_on: boolean;
 }
 
 export interface ITokens {

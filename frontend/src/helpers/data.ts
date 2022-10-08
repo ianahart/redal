@@ -40,6 +40,12 @@ export const userState = {
   first_name: '',
   logged_in: false,
   color: '',
+  setting_user: {
+    id: 0,
+    user_id: 0,
+    notifications_on: true,
+    messages_on: true,
+  },
 };
 
 const tokens = retreiveTokens();
@@ -73,5 +79,7 @@ export const postState = {
   user_bookmarked: false,
   user_id: 0,
   community_name: '',
+  community_slug: '',
   image_url: '',
+  community_id: 0,
 };

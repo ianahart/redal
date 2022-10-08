@@ -18,6 +18,8 @@ from django.core.exceptions import ObjectDoesNotExist
 from datetime import datetime, timedelta, date
 from services.file_upload import FileUpload
 import random
+
+from setting.models import Setting
 logger = logging.getLogger('django')
 
 
@@ -56,6 +58,7 @@ class CustomUserManager(BaseUserManager):
         user = self.model(email=email, password=password, **extra_fields)
         user.set_password(password)
         user.save()
+        user.refresh_from_db()
         return user
 
     def create_superuser(self, email: str, password: str, **extra_fields):

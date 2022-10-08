@@ -4,7 +4,7 @@ import { ImArrowUp, ImArrowDown } from 'react-icons/im';
 import { BiComment } from 'react-icons/bi';
 import { BsBookmark, BsThreeDots } from 'react-icons/bs';
 import { useCallback, useContext, useEffect, useRef, useState } from 'react';
-import { Link as RouterLink } from 'react-router-dom';
+import { Link as RouterLink, useNavigate } from 'react-router-dom';
 import { UserContext } from '../../context/user';
 import Bookmark from './Bookmark';
 import { http } from '../../helpers/utils';
@@ -13,6 +13,7 @@ import { AxiosError } from 'axios';
 interface IPostProps {
   postStyle: string;
   post: IPost;
+  feed: string;
   upVotePost: (postId: number, action: string) => Promise<void>;
   downVotePost: (postId: number, action: string) => Promise<void>;
   handleUpdateBookmark: (action: string, postId: number) => void;
@@ -26,7 +27,9 @@ const Post = ({
   downVotePost,
   handleUpdateBookmark,
   deletePost,
+  feed,
 }: IPostProps) => {
+  const navigate = useNavigate();
   const { user } = useContext(UserContext) as IUserContext;
   const [menuOpen, setMenuOpen] = useState(false);
   const menuRef = useRef<HTMLDivElement>(null);
@@ -56,7 +59,6 @@ const Post = ({
 
   const clickAway = useCallback(
     (e: MouseEvent) => {
-      console.log('click');
       const target = e.target as Element;
 
       if (menuRef.current !== null && triggerRef.current !== null) {
@@ -67,6 +69,12 @@ const Post = ({
     },
     [setMenuOpen]
   );
+
+  const navigateToCommunity = () => {
+    navigate(`/redal/${post.community_slug}`, {
+      state: { community: { id: post.community_id } },
+    });
+  };
 
   useEffect(() => {
     window.addEventListener('click', clickAway);
@@ -108,7 +116,13 @@ const Post = ({
         </Box>
         <Box flexGrow="2" width="90%">
           <Box display="flex" color="text.primary" my="0.5rem">
-            <Text mx="0.5rem">r/{post.community_name}</Text>
+            {feed === 'main' ? (
+              <Text cursor="pointer" onClick={navigateToCommunity} mx="0.5rem">
+                r/{post.community_name}
+              </Text>
+            ) : (
+              <Text mx="0.5rem">r/{post.community_name}</Text>
+            )}
             <Image
               width="25px"
               height="25px"

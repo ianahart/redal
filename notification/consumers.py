@@ -60,6 +60,8 @@ class Consumer(AsyncWebsocketConsumer):
         message = text_data_json['message']
         comment, comment_obj = await database_sync_to_async(self.save_comment)(text_data_json['message'])
 
+        if not comment_obj.author.setting_user.notifications_on:
+            return
         notification = await database_sync_to_async(self.save_notification)(comment_obj)
         notifications = await database_sync_to_async(self.notifications)(comment_obj.author)
 

@@ -105,6 +105,8 @@ class PostManager(models.Manager):
 
                 object.image_url = object.community.image_url
                 object.community_name = object.community.name
+                object.community_slug = object.community.slug
+                object.community_id = object.community.id
 
                 object.upvote_count = upvoted - downvoted
                 object.user_upvoted = self.__check_user_upvoted(object.id, user_id)

@@ -11,6 +11,8 @@ from account.serializers import UserSerializer
 from authentication.serializers import LogoutSerializer, RegisterSerializer, LoginSerializer
 import json
 import logging
+
+from setting.models import Setting
 logger = logging.getLogger('django')
 
 
@@ -53,6 +55,7 @@ class TokenObtainPairView(APIView):
 
 
             user_serializer = UserSerializer(result['user'])
+            print(user_serializer.data)
 
             return Response({
                             'message': 'success',
@@ -78,11 +81,12 @@ class RegisterAPIView(APIView):
 
             exclude = ['email', 'password', 'confirm_password']
             extra_fields = {key:value for key, value in serializer.validated_data.items() if key not in exclude}
-            CustomUser.objects.create(serializer.validated_data['email'],
+            user = CustomUser.objects.create(serializer.validated_data['email'],
                                       serializer.validated_data['password'],
                                       **extra_fields
                                       )
-
+            if user:
+               Setting.objects.create(user)
             return Response({
                 'message': 'success'
             }, status=status.HTTP_200_OK)
