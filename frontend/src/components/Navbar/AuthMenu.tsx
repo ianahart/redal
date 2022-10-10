@@ -16,6 +16,7 @@ import {
   AiOutlinePlus,
   AiOutlineClose,
   AiOutlineBell,
+  AiOutlineMail,
 } from 'react-icons/ai';
 import AuthMenuLink from './AuthMenuLink';
 import { useEffectOnce } from '../../hooks/UseEffectOnce';
@@ -209,6 +210,12 @@ const AuthMenu = () => {
                 url="/redal/notifications"
                 label="Notifications"
                 icon={AiOutlineBell}
+              />
+              <AuthMenuLink
+                handleSetCurrentPage={handleSetCurrentPage}
+                url="/redal/invites"
+                label="Invites"
+                icon={AiOutlineMail}
               />
 
               <Box

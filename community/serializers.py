@@ -3,7 +3,11 @@ from rest_framework import serializers
 from community.models import Community
 from member.serializers import MemberSerializer
 
+class CommunityInviteSerializer(serializers.ModelSerializer):
 
+    class Meta:
+        model = Community
+        fields = ('id', 'name', 'image_url', 'author_id')
 
 class CommunitySearchSerializer(serializers.Serializer):
     value = serializers.CharField(max_length=200)

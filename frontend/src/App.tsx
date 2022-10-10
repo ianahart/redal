@@ -28,6 +28,8 @@ import CreateCommunity from './pages/CreateCommunity';
 import Community from './pages/Community';
 import FullPost from './pages/FullPost';
 import Bookmarks from './pages/Bookmarks';
+import Invite from './pages/Invite';
+import Invites from './pages/Invites';
 import { useEffect } from 'react';
 import useWebSocket, { ReadyState } from 'react-use-websocket';
 
@@ -146,7 +148,22 @@ function App() {
                   </RequireAuth>
                 }
               />
-
+              <Route
+                path="/redal/invite"
+                element={
+                  <RequireAuth>
+                    <Invite />
+                  </RequireAuth>
+                }
+              />
+              <Route
+                path="/redal/invites"
+                element={
+                  <RequireAuth>
+                    <Invites />
+                  </RequireAuth>
+                }
+              />
               <Route
                 path="/redal/settings"
                 element={

@@ -1,5 +1,6 @@
 import { Box, Image, Heading, Text, Button } from '@chakra-ui/react';
 import { useState, useContext, useRef, useEffect, useCallback } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { AxiosError } from 'axios';
 import { http } from '../../helpers/utils';
 
@@ -25,6 +26,7 @@ const CommunityHeader = ({
   isMember,
   handleSetIsMember,
 }: ICommunityHeaderProps) => {
+  const navigate = useNavigate();
   const { user } = useContext(UserContext) as IUserContext;
   const { setMenuHasNextPage, setMenuCurrentPage, setCommunities } = useContext(
     CommunityContext
@@ -109,10 +111,15 @@ const CommunityHeader = ({
     }
   };
 
+  const navigateToInvite = () => {
+    navigate('/redal/invite', { state: community });
+  };
+
   return (
     <Box>
       <Box height="80px" bg="blue.tertiary"></Box>
       <Box
+        width="100%"
         justifyContent="center"
         display="flex"
         position="relative"
@@ -198,6 +205,19 @@ const CommunityHeader = ({
               margin="0 auto"
             >
               Join
+            </Button>
+          )}
+          {community.type === 'private' && user.id === community.user_id && (
+            <Button
+              onClick={navigateToInvite}
+              _hover={{ background: 'blue.quatenary', opacity: 0.8 }}
+              bg="blue.quatenary"
+              color="#fff"
+              width={['60%', '40%', '20%']}
+              margin="0 auto"
+              mt={['1rem', '0', '0']}
+            >
+              Send Invite
             </Button>
           )}
         </Box>

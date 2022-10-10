@@ -60,6 +60,8 @@ INSTALLED_APPS = [
     'notification',
     'like',
     'setting',
+    'invite',
+    'private',
 ]
 
 

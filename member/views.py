@@ -12,6 +12,7 @@ from rest_framework.parsers import FormParser, MultiPartParser
 from account.permissions import AccountPermission
 from member.serializers import MemberCreateSerializer, MemberSerializer
 from member.models import Member
+from private.models import Private
 import json
 
 
@@ -27,6 +28,14 @@ class DetailsAPIView(APIView):
 
             member.delete()
 
+            
+            private = Private.objects.filter(
+                community_id=member.community_id).filter(
+                user_id=member.user_id).first()
+
+
+            if private is not None:
+                private.delete()
 
             return Response({
                                 'message': 'success',

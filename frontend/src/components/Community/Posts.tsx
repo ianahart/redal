@@ -218,7 +218,7 @@ const Posts = ({ community }: IPostsProps) => {
             </Box>
           </Tooltip>
         </Box>
-        <Box m="1rem">
+        <Box display={['none', 'block', 'block']} m="1rem">
           <Menu>
             <Box alignItems="center" display="flex">
               {postStyle === 'card' ? (

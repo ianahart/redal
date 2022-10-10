@@ -1,6 +1,6 @@
 import { Box } from '@chakra-ui/react';
 import { useState, useCallback, useEffect, useContext } from 'react';
-import { useLocation } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 import { AxiosError } from 'axios';
 import { http } from '../helpers/utils';
 import CreatePostBtn from '../components/Community/CreatePostBtn';
@@ -19,6 +19,7 @@ import CommunityHeader from '../components/Community/CommunityHeader';
 
 const AuthorCommunity = () => {
   const { user } = useContext(UserContext) as IUserContext;
+  const navigate = useNavigate();
   const location = useLocation();
   const [error, setError] = useState('');
   const [isMember, setIsMember] = useState(false);
@@ -33,6 +34,7 @@ const AuthorCommunity = () => {
       if (err instanceof AxiosError && err.response) {
         if (err.response.status === 404) {
           setError(err.response.data.error);
+          navigate('/redal/');
         }
       }
     }

@@ -11,6 +11,8 @@ from account.permissions import AccountPermission
 from community.serializers import CommunityNameSerializer, CommunitySearchSerializer, CommunitySerializer, CreateCommunitySerializer, FileSerializer
 import json
 
+from private.models import Private
+
 
 
 
@@ -21,13 +23,13 @@ class DetailsAPIView(APIView):
         try:
 
             community = Community.objects.get_community(pk, request.user.id)
-            if community is None:
+            if community and community['type'] == 'error': 
                 raise NotFound('This community does not exist anymore.')
 
 
             is_member = Member.objects.is_member(pk, request.user.id)
 
-            serializer = CommunitySerializer(community)
+            serializer = CommunitySerializer(community['data'])
 
 
             return Response({
@@ -55,7 +57,9 @@ class SearchCommunityAPIView(APIView):
 
             results = Community.objects.search_results(
                 serializer.validated_data,
-                request.query_params['page'])
+                request.query_params['page'],
+                request.user.id,
+            )
 
             community_serializer = CommunitySerializer(results['communities'], many=True)
 
@@ -150,9 +154,12 @@ class CreateCommunityAPIView(APIView):
 
             community = Community.objects.create(file, author, user, name, type)
 
-            print(community)
             Member.objects.create(community, user)
 
+            Private.objects.author({
+                                       'community': community,
+                                       'user': user,
+                                   })
 
             result = Community.objects.retrieve_all(request.user.id, 0)
             serializer = CommunitySerializer(result['communities'], many=True)

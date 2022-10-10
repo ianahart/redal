@@ -1,10 +1,12 @@
 from django.db import  DatabaseError, models
+from django.db.models import Q
 from django.utils import timezone
 from typing import Dict, Any
 from django.core.paginator import Paginator
 from slugify import slugify #type:ignore
 from account.models import CustomUser
 from member.models import Member
+from private.models import Private
 from services.file_upload import FileUpload
 import random
 import logging
@@ -16,17 +18,30 @@ class CommunityManager(models.Manager):
     def get_community(self, pk: int, user_id: int):
         try:
             community = Community.objects.get(pk=pk)
-            return community
-        except:
+            member = Private.objects.all().filter(community_id=pk).filter(user_id=user_id).first()
+
+            print(member)
+            if community.type == 'private' and member is None:
+                return {'type': 'error', 'msg': 'This community is private'}
+            return {'type': 'ok', 'data': community}
+        except DatabaseError as e:
             logger.error('Unable to retrieve community by it\'s id.')
+            return {'type': 'error', 'msg': 'This community is private'}
 
 
 
-    def search_results(self, data: Dict[str, str], page: int):
+    def search_results(self, data: Dict[str, str], page: int, user_id: int):
         try:
+            ids = Private.objects.filter(
+                user_id=user_id).values_list('user_id', flat=True)
 
-            objects = Community.objects.all().order_by('-id').filter(
-                name__icontains=data['value'])
+            objects = Community.objects.all().filter(
+                Q(name__icontains=data['value'])).filter(
+
+                Q(type='public') | Q(type='private') & Q(user_id=user_id) 
+                    | Q(member_community__user_id__in=ids)
+            ).distinct()
+
 
             paginator = Paginator(objects, 2)
             next_page = int(page) + 1

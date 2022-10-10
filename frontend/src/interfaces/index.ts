@@ -133,6 +133,7 @@ export interface ICommunity {
   type: string;
   image_url: string;
   slug: string;
+  user_id: number;
 }
 
 export interface ICommunityName {
@@ -198,6 +199,20 @@ export interface INotification {
   id: number;
   text: string;
   avatar_url: string;
+}
+
+export interface IInvite {
+  id: number;
+  sender_id: number;
+  community_id: number;
+  community: {
+    author_id: number;
+    id: number;
+    image_url: string;
+    name: string;
+  };
+  sender: IUser;
+  receiver: IUser;
 }
 
 export interface ICommentsResponse {
