@@ -7,7 +7,7 @@ import {
   useRef,
   MouseEvent as ReactMouseEvent,
 } from 'react';
-import { FiSettings } from 'react-icons/fi';
+import { FiSettings, FiUsers } from 'react-icons/fi';
 import { BsList, BsChevronLeft, BsBookmark } from 'react-icons/bs';
 import { TbLogout } from 'react-icons/tb';
 import {
@@ -17,6 +17,7 @@ import {
   AiOutlineClose,
   AiOutlineBell,
   AiOutlineMail,
+  AiOutlineUser,
 } from 'react-icons/ai';
 import AuthMenuLink from './AuthMenuLink';
 import { useEffectOnce } from '../../hooks/UseEffectOnce';
@@ -31,6 +32,7 @@ import {
 import { CommunityContext } from '../../context/community';
 import CommunityList from '../Community/CommunityList';
 import { UserContext } from '../../context/user';
+import { BiIdCard } from 'react-icons/bi';
 
 const AuthMenu = () => {
   const { user, tokens, logout } = useContext(UserContext) as IUserContext;
@@ -184,6 +186,26 @@ const AuthMenu = () => {
                 url="/redal/settings/account"
                 label="User Settings"
                 icon={FiSettings}
+              />
+              <AuthMenuLink
+                handleSetCurrentPage={handleSetCurrentPage}
+                url={`/redal/profile/${user.id}`}
+                label="Profile"
+                icon={BiIdCard}
+              />
+
+              <AuthMenuLink
+                handleSetCurrentPage={handleSetCurrentPage}
+                url={`/redal/friends/${user.id}`}
+                label="Friends"
+                icon={FiUsers}
+              />
+
+              <AuthMenuLink
+                handleSetCurrentPage={handleSetCurrentPage}
+                url={`/redal/requests/${user.id}`}
+                label="Requests"
+                icon={AiOutlineUser}
               />
 
               <AuthMenuLink

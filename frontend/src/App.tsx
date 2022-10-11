@@ -30,6 +30,9 @@ import FullPost from './pages/FullPost';
 import Bookmarks from './pages/Bookmarks';
 import Invite from './pages/Invite';
 import Invites from './pages/Invites';
+import Profile from './pages/Profile';
+import Requests from './pages/Requests';
+import Friends from './pages/Friends';
 import { useEffect } from 'react';
 import useWebSocket, { ReadyState } from 'react-use-websocket';
 
@@ -128,6 +131,32 @@ function App() {
                 element={
                   <RequireAuth>
                     <Bookmarks />
+                  </RequireAuth>
+                }
+              />
+
+              <Route
+                path="/redal/requests/:userId"
+                element={
+                  <RequireAuth>
+                    <Requests />
+                  </RequireAuth>
+                }
+              />
+              <Route
+                path="/redal/friends/:userId"
+                element={
+                  <RequireAuth>
+                    <Friends />
+                  </RequireAuth>
+                }
+              />
+
+              <Route
+                path="/redal/profile/:userId"
+                element={
+                  <RequireAuth>
+                    <Profile />
                   </RequireAuth>
                 }
               />

@@ -1,5 +1,5 @@
 import { Box, Image, Text, Heading } from '@chakra-ui/react';
-import { useNavigate, useParams } from 'react-router-dom';
+import { useNavigate, useParams, Link as RouterLink } from 'react-router-dom';
 import { Axios, AxiosError } from 'axios';
 import { ImArrowUp, ImArrowDown } from 'react-icons/im';
 import { BiComment } from 'react-icons/bi';
@@ -187,7 +187,9 @@ const FullPost = () => {
             {post !== null && (
               <Box>
                 <Box color="text.primary" display="flex">
-                  <Text mx="0.5rem">Posted by {post.name}</Text>
+                  <RouterLink to={`/redal/profile/${post.user_id}`}>
+                    <Text mx="0.5rem">Posted by {post.name}</Text>
+                  </RouterLink>
                   <Text mx="0.5rem">{post.display_date}</Text>
                 </Box>
                 <Box m="0.25rem">

@@ -18,6 +18,7 @@ urlpatterns = [
     path('api/v1/', include(('setting.urls', 'setting'))),
     path('api/v1/', include(('invite.urls', 'invite'))),
     path('api/v1/', include(('private.urls', 'private'))),
+    path('api/v1/', include(('friend.urls', 'friend'))),
 
 
 

@@ -5,7 +5,7 @@ from django.db import DatabaseError
 from django.contrib.auth.hashers import check_password
 from rest_framework.decorators import authentication_classes, permission_classes
 from rest_framework.parsers import FormParser, MultiPartParser
-from rest_framework.exceptions import ParseError
+from rest_framework.exceptions import NotFound, ParseError
 from rest_framework.views import APIView
 from rest_framework_simplejwt.tokens import RefreshToken
 from rest_framework_simplejwt.views import TokenObtainPairView, TokenRefreshView
@@ -41,11 +41,36 @@ class RetreiveUserAPIView(APIView):
 
 
 
-
-
 class DetailsAPIView(APIView):
     permission_classes = [IsAuthenticated, AccountPermission]
     parser_classes = [ MultiPartParser, FormParser, ]
+
+
+    def get(self, request, pk:int):
+        try:
+            user = CustomUser.objects.get(pk=pk)
+            ids = request.user.friend_request_from_user.all().values_list('to_user', flat=True)
+            friend_ids = request.user.friend_user.all().values_list('friend', flat=True)
+            message = ''
+
+            if user.id in ids:
+                message = 'Request sent'
+            elif user.id in friend_ids:
+                message = 'Friends'
+
+            serializer = UserSerializer(user)
+
+            return Response({
+                                'message': 'success',
+                                'user': serializer.data,
+                                'status': message
+                            }, status=status.HTTP_200_OK)
+
+        except NotFound:
+            return Response({
+                                'error': 'No user found'
+                            }, status=status.HTTP_404_NOT_FOUND)
+
 
     def patch(self, request, pk: int):
         try:

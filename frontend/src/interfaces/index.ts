@@ -221,3 +221,34 @@ export interface ICommentsResponse {
   page: number;
   comments: IComment[];
 }
+
+export interface IProfileResponse {
+  message?: string;
+  user: IUser;
+  status: string;
+}
+
+export interface IRequest {
+  id: number;
+  from_user: IUser;
+  to_user: IUser;
+}
+
+export interface IRequestResponse {
+  message?: string;
+  has_next: boolean;
+  page: number;
+  requests: IRequest[];
+}
+
+export interface IFriend {
+  id: number;
+  friend: IUser;
+}
+
+export interface IFriendResponse {
+  message?: string;
+  has_next: boolean;
+  page: number;
+  friends: IFriend[];
+}

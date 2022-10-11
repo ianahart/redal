@@ -132,7 +132,9 @@ const Post = ({
             />
           </Box>
           <Box color="text.primary" display="flex">
-            <Text mx="0.5rem">Posted by {post.name}</Text>
+            <RouterLink to={`/redal/profile/${post.user_id}`}>
+              <Text mx="0.5rem">Posted by {post.name}</Text>
+            </RouterLink>
             <Text mx="0.5rem">{post.display_date}</Text>
           </Box>
           {postStyle === 'card' && (

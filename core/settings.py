@@ -62,6 +62,7 @@ INSTALLED_APPS = [
     'setting',
     'invite',
     'private',
+    'friend',
 ]
 
 
