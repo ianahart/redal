@@ -1,4 +1,5 @@
 from typing import Any, Dict
+from django.db.models import Q
 from django.db import models
 from django.core.paginator import Paginator
 from django.utils import timezone
@@ -28,16 +29,28 @@ class FriendManager(models.Manager):
         friend_one = Friend.objects.filter(user_id=user).filter(friend_id=friend).first()
         friend_two = Friend.objects.filter(user_id=friend).filter(friend_id=user).first()
 
-        friend_one.delete()
-        friend_two.delete()
+        if friend_one is not None:
+            friend_one.delete()
+        if friend_two is not None:  
+            friend_two.delete()
 
     def create(self, data: Dict[str, Any]):
+
+        is_friend = Friend.objects.filter(
+            Q(user=data['user']) & Q(friend=data['friend']) |
+            Q(user=data['friend']) & Q(friend=data['user'])).first()
+
+
+        if is_friend: 
+            return
 
         request_one = FriendRequest.objects.filter(from_user_id=data['user']).filter(to_user_id=data['friend']).first()
         request_two = FriendRequest.objects.filter(to_user_id=data['user']).filter(from_user_id=data['friend']).first()
 
-        request_one.delete()
-        request_two.delete()
+        if request_one is not None:
+            request_one.delete()
+        if request_two is not None:
+            request_two.delete()
 
 
         friend_one = self.model(
@@ -62,7 +75,6 @@ class FriendManager(models.Manager):
         next_page = int(page) + 1
         cur_page = paginator.page(next_page)
 
-        print(objects)
         return {
             'friends': cur_page.object_list,
             'has_next': cur_page.has_next(),
