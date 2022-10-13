@@ -252,3 +252,27 @@ export interface IFriendResponse {
   page: number;
   friends: IFriend[];
 }
+
+export interface IGroup {
+  id: number;
+  user_one: number;
+  user_two: number;
+}
+
+export interface ICheckGroupResponse {
+  message?: string;
+  group: IGroup;
+}
+
+export interface IMessage {
+  id: number;
+  text: string;
+  user: IUser;
+}
+
+export interface IMessageResponse {
+  message?: string;
+  has_next: boolean;
+  page: number;
+  messages: IMessage[];
+}

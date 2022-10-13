@@ -11,12 +11,14 @@ os.environ['DJANGO_SETTINGS_MODULE'] = 'core.settings'
 
 django.setup()
 import notification.routing
+import chat.routing
 
 application = ProtocolTypeRouter({
     "http": asgi,
      "websocket": TokenAuthMiddleware(
            URLRouter(
-               notification.routing.websocket_urlpatterns
+               notification.routing.websocket_urlpatterns +
+               chat.routing.websocket_urlpatterns,
            )
        ),
 })

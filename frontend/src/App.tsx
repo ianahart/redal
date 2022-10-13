@@ -33,6 +33,7 @@ import Invites from './pages/Invites';
 import Profile from './pages/Profile';
 import Requests from './pages/Requests';
 import Friends from './pages/Friends';
+import Messages from './pages/Messages';
 import { useEffect } from 'react';
 import useWebSocket, { ReadyState } from 'react-use-websocket';
 
@@ -131,6 +132,14 @@ function App() {
                 element={
                   <RequireAuth>
                     <Bookmarks />
+                  </RequireAuth>
+                }
+              />
+              <Route
+                path="/redal/messages"
+                element={
+                  <RequireAuth>
+                    <Messages />
                   </RequireAuth>
                 }
               />

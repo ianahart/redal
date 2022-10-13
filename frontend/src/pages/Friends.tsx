@@ -1,6 +1,6 @@
 import { Box, Button, Heading, Text, Image } from '@chakra-ui/react';
 import { AxiosError } from 'axios';
-import { useParams, Link as RouterLink } from 'react-router-dom';
+import { useNavigate, useParams, Link as RouterLink } from 'react-router-dom';
 import { MouseEvent, useContext, useState } from 'react';
 import { http } from '../helpers/utils';
 
@@ -9,6 +9,7 @@ import { IFriend, IFriendResponse, IUserContext } from '../interfaces';
 import { UserContext } from '../context/user';
 const Friends = () => {
   const { user } = useContext(UserContext) as IUserContext;
+  const navigate = useNavigate();
   const params = useParams();
   const [friends, setFriends] = useState<IFriend[]>([]);
   const [page, setPage] = useState(1);
@@ -44,6 +45,10 @@ const Friends = () => {
         console.log(err.response);
       }
     }
+  };
+
+  const navigateToMessages = (e: MouseEvent<HTMLButtonElement>, friendId: number) => {
+    navigate('/redal/messages/', { state: { userId: user.id, friendId } });
   };
 
   return (
@@ -103,18 +108,35 @@ const Friends = () => {
                     </Box>
                   </RouterLink>
                 </Box>
+
                 <Box display="flex">
-                  <Button
-                    onClick={(e) => unFriend(e, friend)}
-                    mx="0.25rem"
-                    type="submit"
-                    _hover={{ background: 'blue.quatenary', opacity: 0.8 }}
-                    bg="blue.quatenary"
-                    color="#fff"
-                    width="80%"
-                  >
-                    Unfriend
-                  </Button>
+                  <Box display="flex">
+                    <Button
+                      onClick={(e) => navigateToMessages(e, friend.friend.id)}
+                      mx="0.25rem"
+                      type="submit"
+                      _hover={{ background: 'text.primary', opacity: 0.8 }}
+                      bg="text.primary"
+                      color="#fff"
+                      width="80%"
+                    >
+                      Messages
+                    </Button>
+                  </Box>
+
+                  <Box display="flex">
+                    <Button
+                      onClick={(e) => unFriend(e, friend)}
+                      mx="0.25rem"
+                      type="submit"
+                      _hover={{ background: 'blue.quatenary', opacity: 0.8 }}
+                      bg="blue.quatenary"
+                      color="#fff"
+                      width="80%"
+                    >
+                      Unfriend
+                    </Button>
+                  </Box>
                 </Box>
               </Box>
             );

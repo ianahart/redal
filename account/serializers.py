@@ -3,6 +3,11 @@ from rest_framework import serializers
 from account.models import CustomUser
 from setting.serializers import SettingSerializer
 
+
+
+
+
+
 class UserSerializer(serializers.ModelSerializer):
     initials = serializers.CharField()
     setting_user = SettingSerializer(read_only=True)
