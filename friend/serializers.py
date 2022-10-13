@@ -18,9 +18,10 @@ class FriendRequestCreateSerializer(serializers.ModelSerializer):
 
 class FriendSerializer(serializers.ModelSerializer):
    friend = UserSerializer()
+   messages_on = serializers.BooleanField()
    class Meta:
         model = Friend
-        fields = ('friend', 'id', )
+        fields = ('friend', 'id', 'messages_on', )
 
 class FriendRequestSerializer(serializers.ModelSerializer):
 

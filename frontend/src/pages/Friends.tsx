@@ -32,6 +32,7 @@ const Friends = () => {
     fetchFriends(`/friends/${params.userId}/?page=0`);
   });
 
+  console.log(friends);
   const unFriend = async (e: MouseEvent<HTMLButtonElement>, friend: IFriend) => {
     try {
       e.stopPropagation();
@@ -110,20 +111,21 @@ const Friends = () => {
                 </Box>
 
                 <Box display="flex">
-                  <Box display="flex">
-                    <Button
-                      onClick={(e) => navigateToMessages(e, friend.friend.id)}
-                      mx="0.25rem"
-                      type="submit"
-                      _hover={{ background: 'text.primary', opacity: 0.8 }}
-                      bg="text.primary"
-                      color="#fff"
-                      width="80%"
-                    >
-                      Messages
-                    </Button>
-                  </Box>
-
+                  {friend.messages_on && (
+                    <Box display="flex">
+                      <Button
+                        onClick={(e) => navigateToMessages(e, friend.friend.id)}
+                        mx="0.25rem"
+                        type="submit"
+                        _hover={{ background: 'text.primary', opacity: 0.8 }}
+                        bg="text.primary"
+                        color="#fff"
+                        width="80%"
+                      >
+                        Messages
+                      </Button>
+                    </Box>
+                  )}
                   <Box display="flex">
                     <Button
                       onClick={(e) => unFriend(e, friend)}

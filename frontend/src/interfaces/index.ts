@@ -244,6 +244,7 @@ export interface IRequestResponse {
 export interface IFriend {
   id: number;
   friend: IUser;
+  messages_on: boolean;
 }
 
 export interface IFriendResponse {

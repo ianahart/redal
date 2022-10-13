@@ -71,6 +71,12 @@ class FriendManager(models.Manager):
 
     def get_friends(self, user_id: int, page: int):
         objects = Friend.objects.all().filter(user_id=user_id)
+
+        for object in objects:
+            object.messages_on = object.friend.setting_user.messages_on 
+
+        for object in objects:
+            print(object.messages_on, '@#$@#$@#$@#$@#')
         paginator = Paginator(objects, 1)
         next_page = int(page) + 1
         cur_page = paginator.page(next_page)

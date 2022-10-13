@@ -7,25 +7,42 @@ import { IUserContext } from '../../interfaces';
 import MainHeading from './MainHeading';
 const Notifications = () => {
   const { user } = useContext(UserContext) as IUserContext;
-  const [switchChecked, setSwitchChecked] = useState(true);
+  const [notificationsSwitchChecked, setNotificationsSwitchChecked] = useState(true);
+  const [messagesSwitchChecked, setMessagesSwitchChecked] = useState(true);
 
   useEffect(() => {
-    setSwitchChecked(user.setting_user.notifications_on);
+    setNotificationsSwitchChecked(user.setting_user.notifications_on);
   }, [user.id, user.setting_user.notifications_on]);
 
+  useEffect(() => {
+    console.log(user.setting_user.messages_on);
+    setMessagesSwitchChecked(user.setting_user.messages_on);
+  }, [user.id, user.setting_user.messages_on]);
+
   const toggleNotificationsSwitch = async () => {
-    console.log('test');
-    setSwitchChecked((prevState) => !prevState);
+    setNotificationsSwitchChecked((prevState) => !prevState);
     try {
       const response = await http.patch(
         `/settings/notifications/${user.setting_user.id}/`,
         {
-          notifications_on: !switchChecked,
+          notifications_on: !notificationsSwitchChecked,
         }
       );
     } catch (err: unknown | AxiosError) {
       if (err instanceof AxiosError && err.response) {
-        console.log(err.response);
+        return;
+      }
+    }
+  };
+
+  const toggleMessageSwitch = async () => {
+    setMessagesSwitchChecked((prevState) => !prevState);
+    try {
+      const response = await http.patch(`/settings/messages/${user.setting_user.id}/`, {
+        messages_on: !messagesSwitchChecked,
+      });
+    } catch (err: unknown | AxiosError) {
+      if (err instanceof AxiosError && err.response) {
         return;
       }
     }
@@ -33,8 +50,24 @@ const Notifications = () => {
 
   return (
     <Box>
-      <Box my="2em" ml="2rem" display="flex" justify-content="flex-start">
+      <Box
+        my="2em"
+        ml="2rem"
+        flexDir="column"
+        alignItems="flex-start"
+        display="flex"
+        justify-content="flex-start"
+      >
         <MainHeading mainHeader="Message settings" subHeader="messages" />
+        <Box mt="1.5rem" display="flex">
+          <Text>Messages {messagesSwitchChecked ? 'On' : 'Off'}</Text>
+          <Switch
+            onChange={toggleMessageSwitch}
+            ml="1.5rem"
+            size="lg"
+            isChecked={messagesSwitchChecked}
+          />
+        </Box>
       </Box>
       <Box
         my="2rem"
@@ -46,12 +79,12 @@ const Notifications = () => {
       >
         <MainHeading mainHeader="Notification settings" subHeader="Notifications" />
         <Box mt="1.5rem" display="flex">
-          <Text>Notifications {switchChecked ? 'On' : 'Off'}</Text>
+          <Text>Notifications {notificationsSwitchChecked ? 'On' : 'Off'}</Text>
           <Switch
             onChange={toggleNotificationsSwitch}
             ml="1.5rem"
             size="lg"
-            isChecked={switchChecked}
+            isChecked={notificationsSwitchChecked}
           />
         </Box>
       </Box>

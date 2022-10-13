@@ -12,6 +12,20 @@ class SettingManager(models.Manager):
 
 
 
+    def update_messages(self, data: Dict[str, bool], pk: int):
+        try:
+
+            setting = Setting.objects.get(pk=pk)
+            setting.messages_on = data['messages_on']
+            setting.save()
+
+        except:
+            logger.error('Unable to update message settings.')
+
+
+
+
+
     def update_notifications(self, data: Dict[str, bool], pk: int):
         try:
             setting = Setting.objects.get(pk=pk)

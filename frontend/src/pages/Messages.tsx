@@ -53,11 +53,9 @@ const Messages = () => {
       setMessages((prevState) => [...prevState, ...responseTwo.data.messages]);
       setHasNext(responseTwo.data.has_next);
       setPage(responseTwo.data.page);
-
-      console.log(responseTwo);
     } catch (err: unknown | AxiosError) {
       if (err instanceof AxiosError && err.response) {
-        console.log(err.response);
+        return;
       }
     }
   };
@@ -73,7 +71,7 @@ const Messages = () => {
       setPage(response.data.page);
     } catch (err: unknown | AxiosError) {
       if (err instanceof AxiosError && err.response) {
-        console.log(err.response);
+        return;
       }
     }
   };
