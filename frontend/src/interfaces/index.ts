@@ -277,3 +277,15 @@ export interface IMessageResponse {
   page: number;
   messages: IMessage[];
 }
+
+export interface IAccountSettings {
+  id: number;
+  gender: string;
+  email: string;
+  country: string;
+}
+
+export interface IAccountSettingsResponse {
+  message?: string;
+  account: IAccountSettings;
+}

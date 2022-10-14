@@ -47,6 +47,20 @@ class CustomUserManager(BaseUserManager):
         token.blacklist()
 
 
+
+
+    def change_email(self, email: str, refresh_token: str, pk: int):
+        try:
+            user = CustomUser.objects.get(pk=pk)
+            user.email = email
+            user.save()
+            token = RefreshToken(refresh_token)
+            token.blacklist()
+
+        except DatabaseError:
+            logger.error('Unable to change user email.')
+
+
     def create(self, email: str, password: str, **extra_fields):
         """
         Create and save a User with the given email and password.
@@ -164,6 +178,8 @@ class CustomUser(AbstractUser, PermissionsMixin):
     about = models.CharField(max_length=200, blank=True, null=True)
     first_name = models.CharField(max_length=200, blank=True, null=True)
     last_name = models.CharField(max_length=200, blank=True, null=True)
+    gender = models.CharField(max_length=50, blank=True, null=True)
+    country = models.CharField(max_length=200, default="United States", blank=True, null=True)
     email = models.EmailField(_(
         'email address'),
         unique=True,

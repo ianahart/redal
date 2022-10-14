@@ -24,6 +24,8 @@ class CustomUserAdmin(BaseUserAdmin):
                     'about',
                     'display_name',
                     'date_joined',
+                    'gender',
+                    'country',
                     'avatar_url',
                     'first_name',
                     'last_name',

@@ -1,3 +1,4 @@
+from botocore.serialize import create_serializer
 from django.shortcuts import render
 
 from django.core.exceptions import BadRequest, ObjectDoesNotExist
@@ -15,8 +16,47 @@ from rest_framework.response import Response
 from rest_framework.permissions import AllowAny, IsAuthenticated
 from account.permissions import AccountPermission
 from account.models import CustomUser
-from account.serializers import UpdateUserSerializer, UserSerializer, FileSerializer
+from account.serializers import UpdateUserSerializer, UserSerializer, FileSerializer,AccountSettingsSerializer, AccountSettingsEmailSerializer
 import json
+
+
+
+
+
+
+class AccountSettingsEmailAPIView(APIView):
+    permission_classes = [IsAuthenticated, ]
+    def patch(self, request, pk: int):
+        try:
+            create_serializer= AccountSettingsEmailSerializer(data=request.data)
+            create_serializer.is_valid(raise_exception=True)
+            email, refresh_token = create_serializer.validated_data.values()
+            CustomUser.objects.change_email(email, refresh_token, pk)
+            return Response({
+                                'message': 'success'
+                            }, status=status.HTTP_200_OK)
+        except ParseError:
+            return Response({
+                                'error': 'Email is invalid'
+                            }, status=status.HTTP_400_BAD_REQUEST)
+
+
+class AccountSettingsListCreateAPIView(APIView):
+    permission_classes = [IsAuthenticated, ]
+    def get(self, request):
+
+        try:
+            user = CustomUser.objects.get(pk=request.user.id)
+            serializer = AccountSettingsSerializer(user)
+            return Response({
+                                'message': 'success',
+                                'account': serializer.data
+                            }, status=status.HTTP_200_OK)
+
+        except NotFound:
+            return Response({
+                                'error': 'Unable to retrieve user account settings.'
+                            }, status=status.HTTP_404_NOT_FOUND)
 
 
 class RetreiveUserAPIView(APIView):

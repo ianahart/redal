@@ -1,7 +1,6 @@
 import { Text, Box, UnorderedList, Image } from '@chakra-ui/react';
 import { AiOutlineClose } from 'react-icons/ai';
 import { GiHamburgerMenu } from 'react-icons/gi';
-import Searchbar from './Searchbar';
 import ListItems from './ListItems';
 import logo from '../../images/logo.png';
 import { useCallback, useEffect, useState } from 'react';
@@ -42,21 +41,20 @@ const Navbar = () => {
         </Box>
       </Box>
       <Box as="nav" className="mainNav">
-        <Box></Box>
+        <Image
+          mr="auto"
+          ml="0.5rem"
+          borderRadius="8px"
+          width="40px"
+          height="40px"
+          src={logo}
+          alt="logo"
+        />
+
         <UnorderedList display="flex" alignItems="center" listStyleType="none">
           <ListItems />
         </UnorderedList>
-        <Box display="flex" alignItems="center">
-          <Searchbar />
-          <Image
-            ml="1rem"
-            borderRadius="8px"
-            width="40px"
-            height="40px"
-            src={logo}
-            alt="logo"
-          />
-        </Box>
+        <Box display="flex" alignItems="center"></Box>
       </Box>
     </Box>
   );
