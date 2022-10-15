@@ -5,6 +5,19 @@ from setting.serializers import SettingSerializer
 
 
 
+class AccountSettingsCountrySerializer(serializers.ModelSerializer):
+    class Meta:
+        model = CustomUser
+        fields = ('country', )
+
+
+
+class AccountSettingsGenderSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = CustomUser
+        fields = ('gender', )
+
+
 class AccountSettingsEmailSerializer(serializers.ModelSerializer):
     refresh_token = serializers.CharField()
     class Meta:

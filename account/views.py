@@ -6,7 +6,7 @@ from django.db import DatabaseError
 from django.contrib.auth.hashers import check_password
 from rest_framework.decorators import authentication_classes, permission_classes
 from rest_framework.parsers import FormParser, MultiPartParser
-from rest_framework.exceptions import NotFound, ParseError
+from rest_framework.exceptions import NotFound, ParseError, PermissionDenied
 from rest_framework.views import APIView
 from rest_framework_simplejwt.tokens import RefreshToken
 from rest_framework_simplejwt.views import TokenObtainPairView, TokenRefreshView
@@ -16,13 +16,48 @@ from rest_framework.response import Response
 from rest_framework.permissions import AllowAny, IsAuthenticated
 from account.permissions import AccountPermission
 from account.models import CustomUser
-from account.serializers import UpdateUserSerializer, UserSerializer, FileSerializer,AccountSettingsSerializer, AccountSettingsEmailSerializer
+from account.serializers import AccountSettingsCountrySerializer, AccountSettingsGenderSerializer, UpdateUserSerializer, UserSerializer, FileSerializer,AccountSettingsSerializer, AccountSettingsEmailSerializer
 import json
 
 
+class AccountSettingsCountryAPIView(APIView):
+    permission_classes = [IsAuthenticated, ]
+    def patch(self, request, pk: int):
+        try:
+            account = CustomUser.objects.get(pk=pk)
+            self.check_object_permissions(request, account)
+            create_serializer= AccountSettingsCountrySerializer(data=request.data)
+            create_serializer.is_valid(raise_exception=True)
+            CustomUser.objects.change_country(create_serializer.validated_data, pk)
+            return Response({
+                                'message': 'success'
+                            }, status=status.HTTP_200_OK)
+        except ParseError:
+            return Response({
+                                'error': 'Email is invalid'
+                            }, status=status.HTTP_400_BAD_REQUEST)
 
 
 
+
+
+
+class AccountSettingsGenderAPIView(APIView):
+    permission_classes = [IsAuthenticated, ]
+    def patch(self, request, pk: int):
+        try:
+            account = CustomUser.objects.get(pk=pk)
+            self.check_object_permissions(request, account)
+            create_serializer= AccountSettingsGenderSerializer(data=request.data)
+            create_serializer.is_valid(raise_exception=True)
+            CustomUser.objects.change_gender(create_serializer.validated_data, pk)
+            return Response({
+                                'message': 'success'
+                            }, status=status.HTTP_200_OK)
+        except ParseError:
+            return Response({
+                                'error': 'Email is invalid'
+                            }, status=status.HTTP_400_BAD_REQUEST)
 
 class AccountSettingsEmailAPIView(APIView):
     permission_classes = [IsAuthenticated, ]
@@ -85,6 +120,19 @@ class DetailsAPIView(APIView):
     permission_classes = [IsAuthenticated, AccountPermission]
     parser_classes = [ MultiPartParser, FormParser, ]
 
+    def delete(self, request, pk: int):
+        try:
+            user = CustomUser.objects.get(pk=pk)
+            self.check_object_permissions(request, user)
+            user.delete()
+
+            return Response({
+                                'message': 'success'
+                            }, status=status.HTTP_200_OK)
+        except PermissionDenied:
+            return Response({
+                                'error': 'You do not have proper authorization.'
+                            }, status=status.HTTP_403_FORBIDDEN)
 
     def get(self, request, pk:int):
         try:

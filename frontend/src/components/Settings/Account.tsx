@@ -1,8 +1,11 @@
 import { Box, Button, Text, Select } from '@chakra-ui/react';
 import { AxiosError } from 'axios';
-import { useContext, useState } from 'react';
+import { useContext, useEffect, useState, useCallback, useRef } from 'react';
 import { http } from '../../helpers/utils';
+import { useNavigate } from 'react-router-dom';
 import { useEffectOnce } from '../../hooks/UseEffectOnce';
+import { BsChevronDown, BsTrash } from 'react-icons/bs';
+import { nanoid } from 'nanoid';
 import {
   IAccountSettingsResponse,
   ICommunityContext,
@@ -15,15 +18,36 @@ import { UserContext } from '../../context/user';
 import { retreiveTokens } from '../../helpers/utils';
 import { CommunityContext } from '../../context/community';
 const Account = () => {
+  const navigate = useNavigate();
   const { user, logout } = useContext(UserContext) as IUserContext;
+  const menuRef = useRef<HTMLDivElement>(null);
+  const triggerRef = useRef<HTMLDivElement>(null);
   const { resetCommunities } = useContext(CommunityContext) as ICommunityContext;
   const [account, setAccount] = useState(accountSettingsState);
   const [modalOpen, setModalOpen] = useState(false);
+  const [menuOpen, setMenuOpen] = useState(false);
   const [emailError, setEmailError] = useState('');
+  const genders = ['Man', 'Woman', 'Non-Binary', 'I prefer not to say'];
   const fetchAccountSettings = async (endpoint: string) => {
     try {
       const response = await http.get<IAccountSettingsResponse>(endpoint);
       setAccount(response.data.account);
+    } catch (err: unknown | AxiosError) {
+      if (err instanceof AxiosError && err.response) {
+        return;
+      }
+    }
+  };
+
+  const handleSelectChange = async (e: React.ChangeEvent<HTMLSelectElement>) => {
+    try {
+      setAccount((prevState) => ({
+        ...prevState,
+        country: e.target.value,
+      }));
+      const response = await http.patch('/account/settings/country/' + user.id + '/', {
+        country: e.target.value,
+      });
     } catch (err: unknown | AxiosError) {
       if (err instanceof AxiosError && err.response) {
         return;
@@ -51,6 +75,59 @@ const Account = () => {
     } catch (err: unknown | AxiosError) {
       if (err instanceof AxiosError && err.response) {
         setEmailError(err.response.data.email);
+        return;
+      }
+    }
+  };
+
+  const clickAway = useCallback(
+    (e: MouseEvent) => {
+      const target = e.target as Element;
+
+      if (menuRef.current !== null && triggerRef.current !== null) {
+        if (!menuRef.current.contains(target) && triggerRef.current !== target) {
+          setMenuOpen(false);
+        }
+      }
+    },
+    [setMenuOpen]
+  );
+  useEffect(() => {
+    window.addEventListener('click', clickAway);
+    return () => window.removeEventListener('click', clickAway);
+  }, [clickAway]);
+
+  const updateGender = async (
+    e: React.MouseEvent<HTMLParagraphElement>,
+    gender: string
+  ) => {
+    try {
+      e.stopPropagation();
+      setAccount((prevState) => ({
+        ...prevState,
+        gender,
+      }));
+
+      const response = await http.patch(`/account/settings/gender/${user.id}/`, {
+        gender,
+      });
+    } catch (err: unknown | AxiosError) {
+      if (err instanceof AxiosError && err.response) {
+        return;
+      }
+    }
+  };
+
+  const deleteAccount = async (e: React.MouseEvent<HTMLDivElement>) => {
+    try {
+      e.stopPropagation();
+      const response = await http.delete(`/account/${user.id}/`);
+      logout();
+      resetCommunities();
+
+      navigate('/');
+    } catch (err: unknown | AxiosError) {
+      if (err instanceof AxiosError && err.response) {
         return;
       }
     }
@@ -105,8 +182,44 @@ const Account = () => {
               content you see.
             </Text>
           </Box>
-          <Box>
-            <Button>Gender</Button>
+          <Box
+            ref={triggerRef}
+            onClick={() => setMenuOpen(true)}
+            position="relative"
+            cursor="pointer"
+            display="flex"
+            alignItems="center"
+          >
+            <Text pointerEvents="none" mr="0.25rem">
+              {account.gender === null ? 'Gender' : account.gender}
+            </Text>
+            <BsChevronDown />
+            {menuOpen && (
+              <Box
+                position="absolute"
+                top="25px"
+                left="0"
+                bg="blue.tertiary"
+                width="150px"
+                textAlign="left"
+                borderRadius="3px"
+                ref={menuRef}
+              >
+                {genders.map((gender) => {
+                  return (
+                    <Box
+                      borderBottom="1px solid"
+                      borderColor="#4e4e50"
+                      p="0.25rem"
+                      cursor="pointer"
+                      key={nanoid()}
+                    >
+                      <Text onClick={(e) => updateGender(e, gender)}>{gender}</Text>
+                    </Box>
+                  );
+                })}
+              </Box>
+            )}
           </Box>
         </Box>
         <Box mt="3rem">
@@ -117,15 +230,42 @@ const Account = () => {
             </Text>
           </Box>
           <Box>
-            <Select ml="0.5rem" mt="1rem" borderColor="text.primary" width="50%">
-              {countries.map((country) => {
+            <Select
+              value={account.country}
+              onChange={handleSelectChange}
+              ml="0.5rem"
+              mt="1rem"
+              borderColor="text.primary"
+              width="50%"
+            >
+              {countries.map((country, index) => {
                 return (
-                  <option selected={account.country === country} value={country}>
+                  <option key={nanoid()} value={country}>
                     {country}
                   </option>
                 );
               })}
             </Select>
+          </Box>
+        </Box>
+        <Box p="0.5rem" pb="3rem">
+          <MainHeading mainHeader="" subHeader="Delete Account" />
+        </Box>
+        <Box display="flex" justifyContent="flex-end" pb="2rem">
+          <Box
+            display="flex"
+            alignItems="center"
+            cursor="pointer"
+            onClick={deleteAccount}
+          >
+            <BsTrash color="red" />
+            <Button
+              background="transparent"
+              color="red"
+              _hover={{ background: 'transparent' }}
+            >
+              DELETE ACCOUNT
+            </Button>
           </Box>
         </Box>
       </Box>

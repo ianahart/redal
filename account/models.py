@@ -46,8 +46,25 @@ class CustomUserManager(BaseUserManager):
         token = RefreshToken(refresh_token)
         token.blacklist()
 
+    def change_gender(self, gender, pk: int):
+        try:
+            user = CustomUser.objects.get(pk=pk)
+            user.gender = gender['gender']
+            user.save()
+
+        except DatabaseError:
+            logger.error('Unable to change user gender.')
 
 
+    def change_country(self, country, pk: int):
+        try:
+            print(country)
+            user = CustomUser.objects.get(pk=pk)
+            user.country = country['country']
+            user.save()
+
+        except DatabaseError:
+            logger.error('Unable to change user gender.')
 
     def change_email(self, email: str, refresh_token: str, pk: int):
         try:
