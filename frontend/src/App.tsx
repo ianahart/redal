@@ -16,6 +16,7 @@ import { useEffectOnce } from './hooks/UseEffectOnce';
 import Redal from './pages/Redal';
 import RequireGuest from './components/Mixed/RequireGuest';
 import RequireAuth from './components/Mixed/RequireAuth';
+import ResetPassword from './pages/ResetPassword';
 import WithAxios from './helpers/WithAxios';
 import AuthNavbar from './components/Navbar/AuthNavbar';
 import Settings from './pages/Settings';
@@ -34,6 +35,7 @@ import Profile from './pages/Profile';
 import Requests from './pages/Requests';
 import Friends from './pages/Friends';
 import Messages from './pages/Messages';
+import ForgotPassword from './pages/ForgotPassword';
 import { useEffect } from 'react';
 import useWebSocket, { ReadyState } from 'react-use-websocket';
 
@@ -93,6 +95,24 @@ function App() {
                   </RequireGuest>
                 }
               />
+
+              <Route
+                path="/forgot-password"
+                element={
+                  <RequireGuest>
+                    <ForgotPassword />
+                  </RequireGuest>
+                }
+              />
+              <Route
+                path="/reset-password"
+                element={
+                  <RequireGuest>
+                    <ResetPassword />
+                  </RequireGuest>
+                }
+              />
+
               <Route
                 path="/redal"
                 element={

@@ -3,6 +3,16 @@ import re
 from account.models import CustomUser
 
 
+
+class ForgotPasswordSerializer(serializers.Serializer):
+    email = serializers.EmailField()
+
+    class Meta:
+        fields = ('email', )
+
+    def validate(self, data):
+        return data
+
 class LogoutSerializer(serializers.ModelSerializer):
     refresh_token = serializers.CharField()
     id = serializers.IntegerField()

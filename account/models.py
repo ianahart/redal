@@ -1,10 +1,10 @@
 import jwt
 import logging
 from typing import Any, Dict, Union
+from django.core.mail import EmailMessage
 
 from rest_framework.exceptions import ParseError
 from core import settings
-from django.core.mail import EmailMessage
 from rest_framework_simplejwt.exceptions import TokenError
 from rest_framework_simplejwt.tokens import RefreshToken
 from django.template.loader import render_to_string
@@ -24,7 +24,14 @@ logger = logging.getLogger('django')
 
 
 class CustomUserManager(BaseUserManager):
+    def update_password(self, password: str, user_id: int):
+        user = CustomUser.objects.get(pk=user_id)
+        if hashers.check_password(password, user.password):
+            return {'type': 'error', 'error': 'Password must not be the same as old password.'}
 
+        user.password = hashers.make_password(password)
+        user.save()
+        return {'type': 'ok'}
 
     def __avatar_colors(self):
      colors = ['#FDDB40',
@@ -36,6 +43,34 @@ class CustomUserManager(BaseUserManager):
 
      random_int = random.randint(0, len(colors) - 1)
      return colors[random_int]
+
+
+
+    def forgot_password(self, data):
+        try:
+            user = CustomUser.objects.filter(email=data['email']).first()
+            if user is None:
+                raise ObjectDoesNotExist
+
+            token = RefreshToken.for_user(user)
+            context = {'user': user.first_name, 'uid': user.id, 'token': token}
+            message = render_to_string('forgot-password.html', context)
+            refresh = str(token)
+
+            mail = EmailMessage(
+                subject="Password reset",
+                body=message,
+                from_email=settings.EMAIL_SENDER,
+                to=[data['email']]
+            )
+            mail.content_subtype = 'html'
+            mail.send()
+
+            return {'type': 'ok', 'data': {'uid': user.id, 'token': refresh}}
+
+        except (ObjectDoesNotExist):
+            logger.error('Unable to send password reset email')
+            return {'type': 'error', 'data': 'Email address does not exist.'}
 
 
 
@@ -218,5 +253,6 @@ class CustomUser(AbstractUser, PermissionsMixin):
     @property
     def initials(self):
         return str(self.first_name)[0:1] + str(self.last_name)[0:1]
+
 
 

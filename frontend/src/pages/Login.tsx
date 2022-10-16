@@ -12,7 +12,7 @@ import { useState, FormEvent, ChangeEvent, useContext } from 'react';
 import { UserContext } from '../context/user';
 import { loginState } from '../helpers/data';
 import { http } from '../helpers/utils';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, Link as RouterLink } from 'react-router-dom';
 import { ILoginForm, ILoginResponse, IUserContext } from '../interfaces';
 const Login = () => {
   const navigate = useNavigate();
@@ -135,6 +135,11 @@ const Login = () => {
             )}
           </FormControl>
 
+          <Box textAlign="right" m="1rem" mb="2rem">
+            <RouterLink to="/forgot-password">
+              <Text color="text.primary">Forgot password?</Text>
+            </RouterLink>
+          </Box>
           <Box>
             <Button
               type="submit"
