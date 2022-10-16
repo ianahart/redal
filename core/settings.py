@@ -11,7 +11,7 @@ https://docs.djangoproject.com/en/4.0/ref/settings/
 """
 
 
-from tkinter import W
+
 import environ
 import os
 import sys
