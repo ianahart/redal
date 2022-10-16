@@ -24,6 +24,10 @@ env = environ.Env()
 environ.Env.read_env()
 
 
+
+os.environ.setdefault("DJANGO_SETTINGS_MODULE", "core.settings")
+
+
 BASE_DIR = Path(__file__).resolve().parent.parent
 
 
