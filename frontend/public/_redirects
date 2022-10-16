@@ -1,0 +1,6 @@
+
+/ws/* https://redal.herokuapp.com/ws/:splat  200
+/api/* https://redal.herokuapp.com/api/:splat  200
+
+
+/*    /index.html   200

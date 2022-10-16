@@ -75,7 +75,7 @@ const Comments = ({ postId, authorId }: ICommentProps) => {
     setInputValue(e.target.value);
   };
 
-  const socketUrl = `ws://127.0.0.1:8000/ws/notification/${user.id}/?token=${
+  const socketUrl = `wss://devtrove.herokuapp.com/ws/notification/${user.id}/?token=${
     retreiveTokens()?.access_token
   }`;
 

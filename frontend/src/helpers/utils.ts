@@ -1,6 +1,6 @@
 import axios from 'axios';
 export const http = axios.create({
-  baseURL: 'http://localhost:3000/api/v1/',
+  baseURL: 'https://chic-empanada-6c3274.netlify.app/api/v1/',
 });
 
 export const retreiveTokens = () => {

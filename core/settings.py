@@ -11,10 +11,13 @@ https://docs.djangoproject.com/en/4.0/ref/settings/
 """
 
 
+from tkinter import W
 import environ
 import os
 import sys
 from datetime import timedelta
+import dj_database_url
+
 # Initialise environment variables
 from pathlib import Path
 env = environ.Env()
@@ -118,13 +121,13 @@ SIMPLE_JWT = {
 
 CORS_ORIGIN_WHITELIST = [
     'http://localhost:3000',
-    'https://denali-prod.netlify.app'
+    'https://chic-empanada-6c3274.netlify.app'
 ]
 
 CORS_ALLOWED_ORIGINS = [
     "http://localhost:3000",
     "http://127.0.0.1:3000",
-    'https://denali-prod.netlify.app'
+    'https://chic-empanada-6c3274.netlify.app'
 ]
 
 
@@ -172,17 +175,34 @@ ASGI_APPLICATION = 'core.asgi.application'
 # https://docs.djangoproject.com/en/4.0/ref/settings/#databases
 
 
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.postgresql',
-        'NAME': env('DATABASE_NAME'),
-        'USER': env('DATABASE_USER'),
-        'PASSWORD': env('DATABASE_HOST'),
-        'PORT': env('DATABASE_PORT')
+# DATABASES = {
+#     'default': {
+#         'ENGINE': 'django.db.backends.postgresql',
+#         'NAME': env('DATABASE_NAME'),
+#         'USER': env('DATABASE_USER'),
+#         'PASSWORD': env('DATABASE_HOST'),
+#         'PORT': env('DATABASE_PORT')
+#     }
+# }
+
+if DEVELOPMENT_MODE is True:
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.postgresql',
+            'NAME': env('POSTGRES_DB'),
+            'USER': env('POSTGRES_USERNAME'),
+            'PASSWORD': env('POSTGRES_PASSWORD'),
+            'PORT': env('POSTGRES_PORT')
+        }
     }
-}
 
-
+elif len(sys.argv) > 0 and sys.argv[1] != 'collectstatic':
+    if os.getenv("DATABASE_URL", None) is None:
+        raise Exception(
+            "DATABASE_URL environment variable not defined")
+    DATABASES = {
+        "default": dj_database_url.parse(os.environ.get("DATABASE_URL")),
+    }
 
 # Password validation
 # https://docs.djangoproject.com/en/4.0/ref/settings/#auth-password-validators
