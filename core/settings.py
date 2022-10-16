@@ -24,8 +24,6 @@ env = environ.Env()
 environ.Env.read_env()
 
 
-import django
-django.setup()
 
 
 os.environ.setdefault("DJANGO_SETTINGS_MODULE", "core.settings")
