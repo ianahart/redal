@@ -9,7 +9,7 @@ asgi = get_asgi_application()
 #os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'core.settings')
 os.environ['DJANGO_SETTINGS_MODULE'] = 'core.settings'
 
-django.setup()
+#django.setup()
 import notification.routing
 import chat.routing
 
