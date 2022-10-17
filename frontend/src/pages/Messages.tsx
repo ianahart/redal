@@ -76,7 +76,7 @@ const Messages = () => {
     }
   };
 
-  const socketUrl = `wss://devtrove.herokuapp.com/ws/chat/${group.id}/?token=${
+  const socketUrl = `wss://redal.herokuapp.com/ws/chat/${group.id}/?token=${
     retreiveTokens()?.access_token
   }`;
 

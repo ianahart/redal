@@ -56,7 +56,7 @@ const Notifications = () => {
     return () => window.removeEventListener('click', clickAway);
   }, [clickAway]);
 
-  const socketUrl = `wss://devtrove.herokuapp.com/ws/notification/${user.id}/?token=${
+  const socketUrl = `wss://redal.herokuapp.com/ws/notification/${user.id}/?token=${
     retreiveTokens()?.access_token
   }`;
 

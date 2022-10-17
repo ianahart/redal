@@ -50,7 +50,7 @@ function App() {
     const userId = parseJWT(tokens);
 
     setSocketUrl(
-      `wss://devtrove.herokuapp.com/ws/notification/${userId}/?token=${
+      `wss://redal.herokuapp.com/ws/notification/${userId}/?token=${
         retreiveTokens()?.access_token
       }`
     );
