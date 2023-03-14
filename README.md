@@ -23,7 +23,7 @@ Redal is a reddit clone. It allows users to signup and join different communitie
 Use the login information below to explore the application.
 
 ###
-
+https://chic-empanada-6c3274.netlify.app/login </br>
 -u: bluemangroup@aol.com -p Test12345%
 
 ## Run Locally
